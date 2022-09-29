@@ -11,9 +11,13 @@ vim.o.compatible = false
 vim.o.incsearch = true
 vim.o.encoding = "utf-8"
 vim.o.hlsearch = false
+vim.o.scrolloff = 8
+vim.o.syntax = true
 
 --Better indenting
+vim.cmd[[filetype indent off]]
 vim.o.tabstop = 8
+vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 vim.o.autoindent = false
 vim.o.cindent = true
@@ -25,7 +29,7 @@ vim.api.nvim_set_keymap("n", "<CR>", "/", { noremap = true })
 --Auto-brackets
 vim.api.nvim_set_keymap("i", "(<CR>", "(<CR>)<CR><++><Esc>kO", { noremap = true })
 vim.api.nvim_set_keymap("i", "[<CR>", "[<CR>]<CR><++><Esc>kO", { noremap = true })
-vim.api.nvim_set_keymap("i", "{<CR>", "[<CR>]<CR><++><Esc>kO", { noremap = true })
+vim.api.nvim_set_keymap("i", "{<CR>", "{<CR>}<CR><++><Esc>kO", { noremap = true })
 --filetype on
 --filetype indent plugin on
 --set omnifunc=syntaxcomplete#Complete
@@ -33,7 +37,6 @@ vim.api.nvim_set_keymap("i", "{<CR>", "[<CR>]<CR><++><Esc>kO", { noremap = true 
 --set nu
 --set relativenumber
 --set wildmenu
---set scrolloff=8
 --set noshowmode
 --"set ruler
 --set tabstop=2
