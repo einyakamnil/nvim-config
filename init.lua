@@ -55,15 +55,11 @@ vim.api.nvim_set_keymap("n", "<C-j>", "<C-w><C-j>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-k>", "<C-w><C-k>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-l>", "<C-w><C-l>", { noremap = true })
 
---Function for folding
-local fold_config = function(fdm, fde)
-	vim.o.foldmethod = fdm
-	vim.o.foldexpr = fde
-end
+--Load custom functions
+require('custom_funcs')
 
 --Lua file options
 vim.api.nvim_create_augroup("LUA", { clear = true })
-
 
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
