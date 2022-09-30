@@ -4,6 +4,9 @@
 --| | | |  __/ (_) \ V /| | | | | | |
 --|_| |_|\___|\___/ \_/ |_|_| |_| |_|
 --                                   
+--Load plugins
+require('plugins')
+
 --Some nice basic settings
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -13,6 +16,7 @@ vim.opt.encoding = "utf-8"
 vim.opt.hlsearch = false
 vim.opt.scrolloff = 8
 vim.opt.omnifunc = "syntaxcomplete#Complete"
+vim.cmd[[colorscheme gruvbox]]
 
 --Better indenting
 vim.cmd[[filetype indent off]]
