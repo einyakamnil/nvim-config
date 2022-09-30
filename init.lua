@@ -5,23 +5,22 @@
 --|_| |_|\___|\___/ \_/ |_|_| |_| |_|
 --                                   
 --Some nice basic settings
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.compatible = false
-vim.o.incsearch = true
-vim.o.encoding = "utf-8"
-vim.o.hlsearch = false
-vim.o.scrolloff = 8
-vim.o.syntax = true
-vim.o.omnifunc = "syntaxcomplete#Complete"
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.compatible = false
+vim.opt.incsearch = true
+vim.opt.encoding = "utf-8"
+vim.opt.hlsearch = false
+vim.opt.scrolloff = 8
+vim.opt.omnifunc = "syntaxcomplete#Complete"
 
 --Better indenting
 vim.cmd[[filetype indent off]]
-vim.o.tabstop = 8
-vim.o.softtabstop = 4
-vim.o.shiftwidth = 4
-vim.o.autoindent = false
-vim.o.cindent = true
+vim.opt.tabstop = 8
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.autoindent = false
+vim.opt.cindent = true
 
 --Good general key mappings
 vim.api.nvim_set_keymap("n", "<Space>", ":", { noremap = true })
@@ -46,8 +45,6 @@ vim.api.nvim_set_keymap("i", "{{", "{", { noremap = true })
 vim.api.nvim_set_keymap("i", "''", "'", { noremap = true })
 vim.api.nvim_set_keymap("i", "\"\"", "\"", { noremap = true })
 
---Automatically continue comment lines in insert-mode
-vim.o.formatoptions = jcrql
 
 --Faster switching between buffers
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w><C-h>", { noremap = true })
@@ -58,7 +55,7 @@ vim.api.nvim_set_keymap("n", "<C-l>", "<C-w><C-l>", { noremap = true })
 --Load custom functions
 require('custom_funcs')
 
---Lua file options
+--Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
 
 vim.api.nvim_create_autocmd("Filetype", {
@@ -73,65 +70,29 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
-	command = "set formatoptions=jcrql"
+	command = "set formatoptions=cjlqr"
     }
 )
 
---foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
---vim.api.nvim_create_autocmd("Filetype", callback = ft_config("expr", foldexpr))
---set omnifunc=syntaxcomplete#Complete
---colo yak
---set nu
---set relativenumber
---set wildmenu
---set noshowmode
---"set ruler
---set tabstop=2
---set shiftwidth=2
---set autoindent
---"set cindent
---set smartindent
---set visualbell
---set guioptions-=T
---set guioptions-=m
---set completeopt=longest,menuone
---set showcmd
---set laststatus=2
---syntax on
---nnoremap <Space> :
---vnoremap <Space> :
---nnoremap <CR> /
---nnoremap z zA
---nnoremap <Left> :echo "No left for you!"<CR>
---vnoremap <Left> :<C-u>echo "No left for you!"<CR>
---inoremap <Left> <C-o>:echo "No left for you!"<CR>
---nnoremap <Right> :echo "No right for you!"<CR>
---vnoremap <Right> :<C-u>echo "No right for you!"<CR>
---inoremap <Right> <C-o>:echo "No right for you!"<CR>
---nnoremap <Up> :echo "No up for you!"<CR>
---vnoremap <Up> :<C-u>echo "No up for you!"<CR>
---inoremap <Up> <C-o>:echo "No up for you!"<CR>
---nnoremap <Down> :echo "No down for you!"<CR>
---vnoremap <Down> :<C-u>echo "No down for you!"<CR>
---inoremap <Down> <C-o>:echo "No down for you!"<CR>
---
---"Automatically source vimrc on save.
---autocmd! bufwritepost $MYVIMRC source $MYVIMRC
---
---"Open urls in visual mode
---"vnoremap <CR> <++>
---
---"<-->
---"Default macros
---let @a='jVG' "Increase all numbers in following lines by 1
---let @x='jVG' "Decrease all numbers in following lines by 1
---
---"<-->
 --"Settings for C files.
---autocmd FileType c	setlocal formatoptions=ctnqr
+vim.api.nvim_create_augroup("C", { clear = true })
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "C",
+	pattern = "c",
+	callback = function() fold_config(
+		"indent",
+		""
+	    ) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "C",
+	pattern = "c",
+	command = "set formatoptions=cjnqrt"
+    }
+)
 --autocmd FileType c	map <silent> <C-c> :s/^/\/\//<CR>:noh<CR>
 --autocmd FileType c	map <silent> <C-u> :s/^\s*\/\///<CR>:noh<CR>
---autocmd FileType c	set cindent
 --autocmd FileType c	inoremap ;cb /*<CR><CR>/<CR><++><Esc>2ka<Space>
 --autocmd FileType c	nnoremap <buffer> <F5>
 --			\ :w<CR>:!clear<CR>:!gcc "%" -o "%:r"<CR>:!./"%:r"<CR>
@@ -153,8 +114,24 @@ vim.api.nvim_create_autocmd("Filetype", {
 --nnoremap ,sh ggO#!/bin/sh<Esc>:w<CR>:e<CR><C-o>
 --nnoremap ,python ggO#!/bin/env<Space>python3<Esc>:w<CR>:e<CR><C-o>
 --
---"<-->
---"conf file commenting
+--Settings for conf files
+vim.api.nvim_create_augroup("CONF", { clear = true })
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "CONF",
+	pattern = "conf",
+	callback = function() fold_config(
+	"expr",
+	"(getline(v:lnum)=~?'^\\#.*$')?0:(getline(v:lnum-1)=~?'^\\#.*$')||(getline(v:lnum+1)=~?'^\\#.*$')?1:2"
+	) end
+    }
+)
+
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "CONF",
+    	pattern = "conf",
+    	command = "set formatoptions=cjnqrt"
+    }
+)
 --autocmd FileType conf map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
 --autocmd FileType conf	map <silent> <C-u> :s/^\s*\#//<CR>:noh<CR>
 --autocmd FileType conf setlocal foldmethod=expr
@@ -174,11 +151,26 @@ vim.api.nvim_create_autocmd("Filetype", {
 --
 --"<-->
 --"Settings for Markdown
+vim.api.nvim_create_augroup("MARKDOWN", { clear = true })
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "MARKDOWN",
+	pattern = "markdown",
+	callback = function() fold_config(
+	"expr",
+	"(getline(v:lnum)=~?'^\\# .*$')?0:(getline(v:lnum-1)=~?'^\\# .*$')||(getline(v:lnum+1)=~?'^\\# .*$')?1:2"
+	) end
+    }
+)
+
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "MARKDOWN",
+    	pattern = "markdown",
+    	command = "set formatoptions=cjnqrt"
+    }
+)
 --autocmd FileType markdown nnoremap <F5> :w<CR>:!clear<CR>:!pandoc -f markdown -t pdf "%" -o "%:r.pdf"<CR>
 --autocmd FileType markdown nnoremap <buffer> <F6> :!zathura --fork "%:r.pdf"<CR><CR>
 --autocmd FileType markdown nnoremap <buffer> <F6> :!zathura --fork "%:r.pdf"<CR><CR>
---autocmd FileType markdown set tabstop=4
---autocmd FileType markdown set shiftwidth=4
 --autocmd FileType markdown set formatoptions+=r
 --autocmd FileType markdown set comments=b:*,b:-,b:+,n:>
 --autocmd FileType markdown inoremap ;t <Esc>:r $HOME/Vorlagen/latex/traum.md<CR>ggdd/<++><CR>:noh<CR>"_c4l
