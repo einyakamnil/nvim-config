@@ -55,22 +55,34 @@ vim.api.nvim_set_keymap("n", "<C-j>", "<C-w><C-j>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-k>", "<C-w><C-k>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-l>", "<C-w><C-l>", { noremap = true })
 
-function ft_config(foldmethod, foldexpr)
-    vim.o.foldmethod = foldmethod
-    vim.o.foldexpr = foldexpr
+--Function for folding
+local fold_config = function(fdm, fde)
+	vim.o.foldmethod = fdm
+	vim.o.foldexpr = fde
 end
-foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
-ft_config("expr", foldexpr)
 
 --Lua file options
---vim.api.nvim_create_augroup("LUA", { clear = true })
---vim.api.nvim_create_autocmd("Filetype", {
---	group = "LUA",
---    	pattern = {"lua"},
---	callback = ft_config("expr", foldexpr)
---    }
---)
+vim.api.nvim_create_augroup("LUA", { clear = true })
 
+
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+    	pattern = "lua",
+	callback = function() fold_config(
+	    	"expr",
+	    	"(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
+	    ) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+	pattern = "lua",
+	command = "set formatoptions=jcrql"
+    }
+)
+
+--foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
+--vim.api.nvim_create_autocmd("Filetype", callback = ft_config("expr", foldexpr))
 --set omnifunc=syntaxcomplete#Complete
 --colo yak
 --set nu
