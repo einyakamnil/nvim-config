@@ -1,9 +1,15 @@
+--__   __    _    
+--\ \ / /_ _| | __
+-- \ V / _` | |/ /
+--  | | (_| |   < 
+--  |_|\__,_|_|\_\
+--                
 local hl_theme = {
-    Normal = { ctermfg = "grey", ctermbg = "black" },
-    LineNr = { ctermfg = "lightblue", ctermbg = "black" },
-    Comment = { ctermfg = "darkred", ctermbg = "black" },
-    Folded = { ctermfg = "blue", ctermbg = "black", italic = true, bold = true },
-    Function = { ctermfg = "blue", bold = true }
+    Normal = { ctermfg = "grey" },
+    LineNr = { ctermfg = "lightblue" },
+    Comment = { ctermfg = "darkmagenta" },
+    Folded = { ctermfg = "darkblue", ctermbg = "black", bold = true, underline = true},
+    Function = { ctermfg = "lightblue", bold = true }
 }
 
 for group, style in pairs(hl_theme) do
