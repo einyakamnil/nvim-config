@@ -16,7 +16,8 @@ vim.opt.encoding = "utf-8"
 vim.opt.hlsearch = false
 vim.opt.scrolloff = 8
 vim.opt.omnifunc = "syntaxcomplete#Complete"
-vim.cmd[[colorscheme gruvbox]]
+vim.opt.termguicolors = false
+vim.opt.undofile = true
 
 --Better indenting
 vim.cmd[[filetype indent off]]
