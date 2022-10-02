@@ -1,6 +1,6 @@
---			_
--- _ __   ___  _____   _(_)_ __ ___  
---| '_ \ / _ \/ _ \ \ / / | '_ ` _ \ 
+--			 _
+-- _ ___  ___  _____   _(_)_ __ ____  
+--| '_  \/ _ \/ _ \ \ / / | '_ ` _  \ 
 --| | | |  __/ (_) \ V /| | | | | | |
 --|_| |_|\___|\___/ \_/ |_|_| |_| |_|
 --                                   
@@ -79,7 +79,7 @@ vim.api.nvim_create_autocmd("Filetype", {
     }
 )
 
---"Settings for C files.
+--Settings for C files.
 vim.api.nvim_create_augroup("C", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
@@ -96,6 +96,25 @@ vim.api.nvim_create_autocmd("Filetype", {
 	command = "set formatoptions=cjnqrt"
     }
 )
+
+--Settings for Python files.
+vim.api.nvim_create_augroup("PYTHON", { clear = true })
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	callback = function() fold_config(
+		"indent",
+		""
+	    ) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	command = "set formatoptions=cjnqrt"
+    }
+)
+
 --autocmd FileType c	map <silent> <C-c> :s/^/\/\//<CR>:noh<CR>
 --autocmd FileType c	map <silent> <C-u> :s/^\s*\/\///<CR>:noh<CR>
 --autocmd FileType c	inoremap ;cb /*<CR><CR>/<CR><++><Esc>2ka<Space>
