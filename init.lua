@@ -51,11 +51,13 @@ vim.api.nvim_set_keymap("i", "''", "'", { noremap = true })
 vim.api.nvim_set_keymap("i", "\"\"", "\"", { noremap = true })
 
 
---Faster switching between buffers
+--Faster navigation
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w><C-h>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-j>", "<C-w><C-j>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-k>", "<C-w><C-k>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-l>", "<C-w><C-l>", { noremap = true })
+vim.api.nvim_set_keymap("n", "J", "<C-e>", { noremap = true })
+vim.api.nvim_set_keymap("n", "K", "<C-y>", { noremap = true })
 
 --Load custom functions
 require('custom_funcs')
@@ -75,7 +77,9 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
-	command = "set formatoptions=cjlqr"
+	callback = function() format_config(
+		"cjlqr"
+	) end
     }
 )
 
@@ -93,7 +97,9 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
 	pattern = "c",
-	command = "set formatoptions=cjnqrt"
+	callback = function() format_config(
+		"cjnqrt"
+	    ) end
     }
 )
 
@@ -112,6 +118,14 @@ vim.api.nvim_create_autocmd("Filetype", {
 	group = "PYTHON",
 	pattern = "python",
 	command = "set formatoptions=cjnqrt"
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	callback = function() format_config(
+		"cjnqrt"
+	    ) end
     }
 )
 
@@ -215,20 +229,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 --autocmd FileType python	inoremap ;d """<CR>"""<CR><++><Esc>2ka
 --autocmd FileType python	inoremap ;> >>><Tab>
 --
---"PEP-8 Settings
---autocmd FileType python	set tabstop=8
---autocmd FileType python	set softtabstop=4
---autocmd FileType python	set expandtab
---autocmd FileType python	set shiftwidth=4
---autocmd FileType python	set textwidth=79
---autocmd FileType python	set fileformat=unix
---
---"Folding configuration
---autocmd FileType python	set foldmethod=indent
---"    set foldlevel=1
---
---"Auto-continue comments
---autocmd FileType python	setlocal formatoptions=ctnqr
 --
 --"<-->
 --"Settings for sh files.
