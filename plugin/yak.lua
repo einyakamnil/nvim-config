@@ -5,11 +5,12 @@
 --  |_|\__,_|_|\_\
 --                
 --Colorscheme
+local lightblue = 135
 local hl_theme = {
     Normal = { ctermfg = 248 },
     LineNr = { ctermfg = 69, ctermbg = 53 },
-    Comment = { ctermfg = 33, italic = true },
-    Folded = { bold = true, underline = true, ctermfg = 33, ctermbg = 234 },
+    Comment = { ctermfg = lightblue, italic = true },
+    Folded = { ctermfg = lightblue, ctermbg = 53, bold = true, underline = true },
     Identifier = { ctermfg = 177, bold = true },
     Function = { link = "Identifier", bold = true },
     Type = { link = "Identifier", bold = true },
@@ -20,7 +21,7 @@ local hl_theme = {
     Pmenu = { ctermfg = 248, ctermbg = 89, italic = true },
     WildMenu = { link = "Pmenu" },
     PmenuSel = { ctermfg = 248, ctermbg = 52, bold = true },
-    Title = { ctermfg = 33, bold = true }
+    Title = { ctermfg = lightblue, bold = true }
 }
 
 for group, style in pairs(hl_theme) do
