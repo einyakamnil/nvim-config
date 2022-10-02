@@ -20,6 +20,7 @@ local hl_theme = {
     Pmenu = { ctermfg = 248, ctermbg = 89, italic = true },
     WildMenu = { link = "Pmenu" },
     PmenuSel = { ctermfg = 248, ctermbg = 52, bold = true },
+    Title = { ctermfg = 33, bold = true }
 }
 
 for group, style in pairs(hl_theme) do
