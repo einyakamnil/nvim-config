@@ -8,24 +8,24 @@
 require('plugins')
 
 --Some nice basic settings
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.compatible = false
-vim.opt.incsearch = true
-vim.opt.encoding = "utf-8"
-vim.opt.hlsearch = false
-vim.opt.scrolloff = 8
-vim.opt.omnifunc = "syntaxcomplete#Complete"
-vim.opt.termguicolors = false
-vim.opt.undofile = true
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.compatible = false
+vim.o.incsearch = true
+vim.o.encoding = "utf-8"
+vim.o.hlsearch = false
+vim.o.scrolloff = 8
+vim.o.omnifunc = "syntaxcomplete#Complete"
+vim.o.termguicolors = false
+vim.o.undofile = true
 
 --Better indenting
 vim.cmd[[filetype indent off]]
-vim.opt.tabstop = 8
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.autoindent = false
-vim.opt.cindent = true
+vim.o.tabstop = 8
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.autoindent = false
+vim.o.cindent = true
 
 --Good general key mappings
 vim.api.nvim_set_keymap("n", "<Space>", ":", { noremap = true })
@@ -52,15 +52,15 @@ vim.api.nvim_set_keymap("i", "\"\"", "\"", { noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>(", "s(<C-r>\")<Esc>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>[", "s[<C-r>\"]<Esc>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>{", "s{<C-r>\"}<Esc>", { noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader><", "s<<C-r>\"><Esc>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>'", "s'<C-r>\"'<Esc>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>\"", "s\"<C-r>\"\"<Esc>", { noremap = true })
 
-
---Faster navigation
-vim.api.nvim_set_keymap("n", "<C-h>", "<C-w><C-h>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-j>", "<C-w><C-j>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-k>", "<C-w><C-k>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-l>", "<C-w><C-l>", { noremap = true })
+--Faster buffer size and view mainpulation
+vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", { noremap = true })
 vim.api.nvim_set_keymap("n", "J", "<C-e>", { noremap = true })
 vim.api.nvim_set_keymap("n", "K", "<C-y>", { noremap = true })
 
@@ -69,44 +69,61 @@ require('custom_funcs')
 
 --Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
-
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
-    	pattern = "lua",
-	callback = function() fold_config(
-	    	"expr",
-	    	"(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
+	pattern = "lua",
+	callback = function() local_buffer(
+		fold_conf, {
+		    fdm = "expr",
+		    fde = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
+		}
 	    ) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
-	callback = function() format_config(
-		"cjlqr"
+	callback = function() local_buffer(
+		format_conf, { fo = "cjlqr" }
+	) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+	pattern = "lua",
+	callback = function() local_buffer(
+		keymap_callback, {
+		    mode = "n",
+		    key = "<Leader>f",
+		    action = "afunction ()<CR><++><CR><BS>end<Esc>2kf(a",
+		    _opts = { noremap = true }
+		}
+		
 	) end
     }
 )
 
 --Settings for C files.
-vim.api.nvim_create_augroup("C", { clear = true })
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "C",
-	pattern = "c",
-	callback = function() fold_config(
-		"indent",
-		""
-	    ) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "C",
-	pattern = "c",
-	callback = function() format_config(
-		"cjnqrt"
-	    ) end
-    }
-)
+--vim.api.nvim_create_augroup("C", { clear = true })
+--vim.api.nvim_create_autocmd("Filetype", {
+--	group = "C",
+--	buffer = 0,
+--	callback = function() fold_buffer(
+--		"C",
+--		"c",
+--		"indent",
+--		""
+--	    ) end
+--    }
+--)
+--vim.api.nvim_create_autocmd("Filetype", {
+--	group = "C",
+--	pattern = "c",
+--	callback = function() format_config(
+--		"cjnqrt"
+--	    ) end
+--    }
+--)
 
 --Settings for Python files.
 vim.api.nvim_create_augroup("PYTHON", { clear = true })
