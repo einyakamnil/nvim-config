@@ -49,6 +49,11 @@ vim.api.nvim_set_keymap("i", "[[", "[", { noremap = true })
 vim.api.nvim_set_keymap("i", "{{", "{", { noremap = true })
 vim.api.nvim_set_keymap("i", "''", "'", { noremap = true })
 vim.api.nvim_set_keymap("i", "\"\"", "\"", { noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader>(", "s(<C-r>\")<Esc>", { noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader>[", "s[<C-r>\"]<Esc>", { noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader>{", "s{<C-r>\"}<Esc>", { noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader>'", "s'<C-r>\"'<Esc>", { noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader>\"", "s\"<C-r>\"\"<Esc>", { noremap = true })
 
 
 --Faster navigation
@@ -215,11 +220,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 --autocmd FileType markdown inoremap ;% <C-r>%<Esc>dF.x
 --
 --"<-->
---"Settings for Matlab/Octave
---autocmd FileType matlab map <silent> <C-c> :s/^/\%/<CR>:noh<CR>
---autocmd FileType matlab	map <silent> <C-u> :s/^\s*%//<CR>:noh<CR>
---
---"<-->
 --"Settings for Python files.
 --"Save and execute Python script from inside vim using F5.
 --autocmd FileType python
@@ -288,51 +288,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 --autocmd FileType tex setlocal comments+=n:\\item,n:\\usepackage
 --
 --"<-->
---"Settings for Vim files.
---autocmd FileType vim	nnoremap <silent> <C-c> :s/^/\"/<CR>:noh<CR>
---autocmd FileType vim	nnoremap <silent> <C-u> :s/^\s*\"//<CR>:noh<CR>
---autocmd FileType vim	vnoremap <silent> <C-c> :s/^/\"/<CR>:noh<CR>
---autocmd FileType vim	vnoremap <silent> <C-u> :s/^\s*\"//<CR>:noh<CR>
---autocmd FileType vim	inoremap < <><Space><++><Esc>5hi
---autocmd FileType vim	inoremap << <
---autocmd FileType vim	inoremap <> <>
---"General markings. Will not get deleted upon reaching them. Jump with <CR>.
---"Fold the "<--> pattern
---autocmd FileType vim setlocal foldmethod=expr
---autocmd FileType vim setlocal
---			\ foldexpr=(getline(v:lnum)=='\"\<\-\-\>')?0:(getline(v:lnum-1)=='\"\<\-\-\>')\\|\\|(getline(v:lnum+1)=='\"\<\-\-\>')?1:2
---
---"<-->
---"Automatically make closing brackets/quote.
---"Double tap if not wanted
---inoremap { {}<++><Esc>4hi
---inoremap {<CR> {<CR>}<CR><CR><++><Esc>2kO
---inoremap {{ {
---inoremap {} {}
---inoremap ( ()<++><Esc>4hi
---inoremap (<CR> (<CR>)<CR><CR><++><Esc>2kO
---inoremap (( (
---inoremap () ()
---inoremap [ []<++><Esc>4hi
---inoremap [<CR> [<CR>]<CR><CR><++><Esc>2kO
---inoremap [[ [
---inoremap [] []
---inoremap " ""<++><Esc>4hi
---inoremap "" "
---inoremap ' ''<++><Esc>4hi
---inoremap '' '
---
---
---"<-->
---"Make brackets, quotes etc. around selected text.
---"Replaces content in the " register.
---vnoremap () s(<C-r>")<Esc>
---vnoremap [] s[<C-r>"]<Esc>
---vnoremap {} s{<C-r>"}<Esc>
---vnoremap '' s'<C-r>"'<Esc>
---vnoremap "" s"<C-r>""<Esc>
---
---"<-->
 --"Jump to <++>. use ";<" to quickly make this tag.
 --"inoremap <Space><Space> <Esc>/<++><CR>:noh<CR>"_c4l
 --inoremap <C-c> <Esc>/<++><CR>:noh<CR>"_c4l
@@ -340,27 +295,15 @@ vim.api.nvim_create_autocmd("Filetype", {
 --
 --"<-->
 --"Better key bindings to navigate/resize splitscreens.
---nnoremap <C-j> <C-w>j
---nnoremap <C-k> <C-w>k
---nnoremap <C-h> <C-w>h
---nnoremap <C-l> <C-w>l
 --nnoremap + <C-w>+
 --nnoremap - <C-w>-
 --nnoremap < <C-w><
 --nnoremap > <C-w>>
 --
---"Faster scrolling
---"nnoremap <C-e> <C-e><C-e>
---"nnoremap <C-y> <C-y><C-y>
---
 --"<-->
 --"scrolling
---inoremap <C-e> <C-o><C-e>
---inoremap <C-y> <C-o><C-y>
 --inoremap <C-j> <C-o><C-e>
 --inoremap <C-k> <C-o><C-y>
---nnoremap J <C-e>
---nnoremap K <C-y>
 --
 --"Save clipboard upon exiting vim.
 --autocmd VimLeave * call system("xclip -selection clipboard -i", getreg('+'))
@@ -369,9 +312,3 @@ vim.api.nvim_create_autocmd("Filetype", {
 --"ctags stuff
 --nnoremap ü <C-]>
 --nnoremap Ü <C-t>
---
---"<-->
---"Use powerline instead of vim statusline
---python3 from powerline.vim import setup as powerline_setup
---python3 powerline_setup()
---python3 del powerline_setup
