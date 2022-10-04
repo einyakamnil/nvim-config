@@ -1,12 +1,3 @@
---Wrapper function for local autocmds
-local_buffer = function(inner_func, opts)
-    vim.api.nvim_create_autocmd("BufEnter", {
-	    buffer = opts.buf,
-	    callback = function() inner_func(opts) end
-	}
-    )
-end
-
 --Function for folding
 fold_conf = function(opts)
     vim.o.foldmethod = opts.fdm
