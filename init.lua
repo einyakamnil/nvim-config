@@ -92,7 +92,18 @@ vim.api.nvim_create_autocmd("Filetype", {
 	callback = function() keymap_callback({
 		    mode = "n",
 		    key = "<Leader>f",
-		    action = "afunction ()<CR><++><CR><BS>end<Esc>2kf(a",
+		    action = "ofunction ()<CR><++><CR><BS>end<Esc>2kf(a",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+	pattern = "lua",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<F4>",
+		    action = ":so /home/linkai/.config/nvim/init.lua<CR>",
 		    _opts = { noremap = true }
 		}) end
     }
@@ -150,7 +161,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 )
 --autocmd FileType c	map <silent> <C-c> :s/^/\/\//<CR>:noh<CR>
 --autocmd FileType c	map <silent> <C-u> :s/^\s*\/\///<CR>:noh<CR>
---autocmd FileType c	inoremap ;cb /*<CR><CR>/<CR><++><Esc>2ka<Space>
 --autocmd FileType c	nnoremap <buffer> <F5>
 --			\ :w<CR>:!clear<CR>:!gcc "%" -o "%:r"<CR>:!./"%:r"<CR>
 --"autocmd FileType c inoremap ,main
@@ -176,17 +186,19 @@ vim.api.nvim_create_augroup("CONF", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "CONF",
 	pattern = "conf",
-	callback = function() fold_config(
-	"expr",
-	"(getline(v:lnum)=~?'^\\#.*$')?0:(getline(v:lnum-1)=~?'^\\#.*$')||(getline(v:lnum+1)=~?'^\\#.*$')?1:2"
-	) end
+	callback = function() fold_conf({
+		fdm = "expr",
+		fde = "(getline(v:lnum)=~?'^\\#.*$')?0:(getline(v:lnum-1)=~?'^\\#.*$')||(getline(v:lnum+1)=~?'^\\#.*$')?1:2"
+	}) end
     }
 )
 
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "CONF",
     	pattern = "conf",
-    	command = "set formatoptions=cjnqrt"
+	callback = function() format_conf(
+		{ fo = "cjnqrt" }
+	) end
     }
 )
 --autocmd FileType conf map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
@@ -212,17 +224,19 @@ vim.api.nvim_create_augroup("MARKDOWN", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "MARKDOWN",
 	pattern = "markdown",
-	callback = function() fold_config(
-	"expr",
-	"(getline(v:lnum)=~?'^\\# .*$')?0:(getline(v:lnum-1)=~?'^\\# .*$')||(getline(v:lnum+1)=~?'^\\# .*$')?1:2"
-	) end
+	callback = function() fold_conf({
+		fdm = "expr",
+		fde = "(getline(v:lnum)=~?'^\\# .*$')?0:(getline(v:lnum-1)=~?'^\\# .*$')||(getline(v:lnum+1)=~?'^\\# .*$')?1:2"
+	    }) end
     }
 )
 
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "MARKDOWN",
     	pattern = "markdown",
-    	command = "set formatoptions=cjnqrt"
+	callback = function() format_conf(
+		{ fo = "cjnqrt" }
+	) end
     }
 )
 --autocmd FileType markdown nnoremap <F5> :w<CR>:!clear<CR>:!pandoc -f markdown -t pdf "%" -o "%:r.pdf"<CR>
@@ -326,3 +340,37 @@ vim.api.nvim_create_autocmd("Filetype", {
 --"ctags stuff
 --nnoremap ü <C-]>
 --nnoremap Ü <C-t>
+--
+function comment(opts)
+    line = opts.line
+    cm = opts.cm
+    if(string.sub(line, 1, 2) == "--")
+    then
+	vim.api.nvim_set_current_line(string.sub(line, 3, -1))
+
+    else
+	vim.api.nvim_set_current_line(cm .. line)
+
+    end
+end
+
+function loop_selection(start, fin, func, opts)
+    for i = start, fin, 1
+    do
+	vim.api.nvim_win_set_cursor(0, { i, 1 })
+	func(opts)
+    end
+end
+
+vim.keymap.set('n', '<C-c>', function() loop_selection(vim.api.nvim_buf_get_mark(0, "<")[1], vim.api.nvim_buf_get_mark(0, ">")[1], comment, vim.api.nvim_get_current_line()) end)
+vim.keymap.set(
+    'v', '<C-c>',
+    function()
+	loop_selection(
+	    vim.api.nvim_buf_get_mark(0, "<")[1],
+	    vim.api.nvim_buf_get_mark(0, ">")[1],
+	    comment,
+	    { line = vim.api.nvim_get_current_line(), cm = "--" }
+	)
+    end
+)
