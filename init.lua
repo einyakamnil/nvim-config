@@ -342,7 +342,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 --nnoremap Ü <C-t>
 --
 function comment(opts)
-    line = opts.line
+    line = vim.api.nvim_get_current_line()
     cm = opts.cm
     if(string.sub(line, 1, 2) == "--")
     then
@@ -355,22 +355,29 @@ function comment(opts)
 end
 
 function loop_selection(start, fin, func, opts)
+    col = vim.api.nvim_win_get_cursor(0)[2]
     for i = start, fin, 1
     do
-	vim.api.nvim_win_set_cursor(0, { i, 1 })
+	vim.api.nvim_win_set_cursor(0, { i, col })
 	func(opts)
     end
 end
 
-vim.keymap.set('n', '<C-c>', function() loop_selection(vim.api.nvim_buf_get_mark(0, "<")[1], vim.api.nvim_buf_get_mark(0, ">")[1], comment, vim.api.nvim_get_current_line()) end)
+vim.keymap.set(
+    'n', '<C-c>',
+    function() loop_selection(
+	    vim.api.nvim_win_get_cursor(0)[1],
+	    vim.api.nvim_win_get_cursor(0)[1],
+	    comment,
+	    { cm = "--" }
+	) end
+)
 vim.keymap.set(
     'v', '<C-c>',
-    function()
-	loop_selection(
+    function() loop_selection(
 	    vim.api.nvim_buf_get_mark(0, "<")[1],
 	    vim.api.nvim_buf_get_mark(0, ">")[1],
 	    comment,
-	    { line = vim.api.nvim_get_current_line(), cm = "--" }
-	)
-    end
+	    { cm = "--" }
+	) end
 )
