@@ -4,9 +4,16 @@
 --| | | |  __/ (_) \ V /| | | | | | |
 --|_| |_|\___|\___/ \_/ |_|_| |_| |_|
 --                                   
---Load plugins
+--Load plugins and colorscheme
 require('plugins')
-require('lualine').setup()
+
+local yak = require('yak')
+require('lualine').setup {
+    options = {
+	theme = yak,
+	section_separators = { left = " ", right = " " },
+    }
+}
 
 --Some nice basic settings
 vim.o.number = true
@@ -252,11 +259,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 --autocmd FileType cpp inoremap ;cb /*<CR><CR>/<CR><++><Esc>2ka<Space>
 --autocmd FileType cpp nnoremap <buffer> <F5>
 --			\ :w<CR>:!clear<CR>:!make<CR>
---"<-->
---"fast shebangs
---nnoremap ,sh ggO#!/bin/sh<Esc>:w<CR>:e<CR><C-o>
---nnoremap ,python ggO#!/bin/env<Space>python3<Esc>:w<CR>:e<CR><C-o>
---
 --Settings for conf files
 vim.api.nvim_create_augroup("CONF", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {

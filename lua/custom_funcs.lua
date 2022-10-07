@@ -1,9 +1,15 @@
---Function for table printing
+--Easy table printing
 function P(table)
     print(vim.inspect(table))
 end
 
---Function for folding
+--Reload script
+function Reload(module)
+    package.loaded[module] = nil
+    return require(module)
+end
+
+--Callback for folding
 fold_conf = function(opts)
     vim.o.foldmethod = opts.fdm
     vim.o.foldexpr = opts.fde
