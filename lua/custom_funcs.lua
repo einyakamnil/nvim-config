@@ -21,9 +21,10 @@ end
 --Toggle comment "cm" on current line
 function comment(cm)
     line = vim.api.nvim_get_current_line()
-    if(string.sub(line, 1, 2) == cm)
+    cmlen = string.len(cm)
+    if(string.sub(line, 1, cmlen) == cm)
     then
-	vim.api.nvim_set_current_line(string.sub(line, 3, -1))
+	vim.api.nvim_set_current_line(string.sub(line, cmlen + 1, -1))
 
     else
 	vim.api.nvim_set_current_line(cm .. line)
@@ -52,15 +53,3 @@ function loop_selection(func, opts)
     
     vim.api.nvim_win_set_cursor(0, { start, col })
 end
-
-vim.keymap.set(
-    'v', '<C-c>',
-    function() loop_selection(
-	    comment,
-	     "--" 
-	) end
-)
-vim.keymap.set(
-    'n', '<C-c>',
-    function() comment("--") end
-)

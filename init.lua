@@ -19,6 +19,7 @@ vim.o.scrolloff = 8
 vim.o.omnifunc = "syntaxcomplete#Complete"
 vim.o.termguicolors = false
 vim.o.undofile = true
+vim.g.mapleader = ";"
 
 --Better indenting
 vim.cmd[[filetype indent off]]
@@ -30,7 +31,8 @@ vim.o.cindent = true
 
 --Good general key mappings
 vim.api.nvim_set_keymap("", "<Space>", ":", { noremap = true })
-vim.api.nvim_set_keymap("n", "<CR>", "/", { noremap = true })
+vim.api.nvim_set_keymap("", "<CR>", "/", { noremap = true })
+vim.api.nvim_set_keymap("n", ",", ";", { noremap = true })
 vim.api.nvim_set_keymap("n", "z", "zA", { noremap = true })
 
 --Jump to tag signs
@@ -154,6 +156,31 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    ) end
     }
 )
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "C",
+	pattern = "c",
+	callback = function() keymap_callback({
+		    mode = "v",
+		    key = "<C-c>",
+		    action = function() loop_selection(
+			    comment,
+			     "//" 
+			) end,
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "C",
+	pattern = "c",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<C-c>",
+		    action = function() comment("//") end,
+		    _opts = { noremap = true }
+		}) end
+    }
+)
 
 --Settings for Python files.
 vim.api.nvim_create_augroup("PYTHON", { clear = true })
@@ -185,8 +212,31 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    }) end
     }
 )
---autocmd FileType c	map <silent> <C-c> :s/^/\/\//<CR>:noh<CR>
---autocmd FileType c	map <silent> <C-u> :s/^\s*\/\///<CR>:noh<CR>
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	callback = function() keymap_callback({
+		    mode = "v",
+		    key = "<C-c>",
+		    action = function() loop_selection(
+			    comment,
+			     "#" 
+			) end,
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<C-c>",
+		    action = function() comment("#") end,
+		    _opts = { noremap = true }
+		}) end
+    }
+)
 --autocmd FileType c	nnoremap <buffer> <F5>
 --			\ :w<CR>:!clear<CR>:!gcc "%" -o "%:r"<CR>:!./"%:r"<CR>
 --"autocmd FileType c inoremap ,main
@@ -227,12 +277,31 @@ vim.api.nvim_create_autocmd("Filetype", {
 	) end
     }
 )
---autocmd FileType conf map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
---autocmd FileType conf	map <silent> <C-u> :s/^\s*\#//<CR>:noh<CR>
---autocmd FileType conf setlocal foldmethod=expr
---autocmd FileType conf setlocal foldexpr=set foldexpr=(getline(v:lnum)=~?'^\#\ .*$')?0:(getline(v:lnum-1)=~?'^\#\ .*?$')\\|\\|(getline(v:lnum+1)=~?'^\#\ .*?$')?1:2
---
---"<-->
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "CONF",
+    	pattern = "conf",
+	callback = function() keymap_callback({
+		    mode = "v",
+		    key = "<C-c>",
+		    action = function() loop_selection(
+			    comment,
+			     "#" 
+			) end,
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "CONF",
+    	pattern = "conf",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<C-c>",
+		    action = function() comment("#") end,
+		    _opts = { noremap = true }
+		}) end
+    }
+)
 --"Settings for HTML files.
 --autocmd FileType html	vmap <silent> <C-c> :s/^/<!--/<CR>:'<,'>s/$/-->/<CR>:noh<CR>
 --autocmd FileType html	vmap <silent> <C-u> :s/^\s*<!--//<CR>:'<,'>s/-->$//<CR>:noh<CR>
@@ -278,8 +347,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 --"Save and execute Python script from inside vim using F5.
 --autocmd FileType python
 --			\ nnoremap <buffer> <F5> :w<CR>:!clear<CR>:exec '!python3' shellescape(@%, 1)<CR>
---autocmd FileType python map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
---autocmd FileType python	map <silent> <C-u> :s/^\s*\#//<CR>:noh<CR>
 --autocmd FileType python	inoremap ;d """<CR>"""<CR><++><Esc>2ka
 --autocmd FileType python	inoremap ;> >>><Tab>
 --
