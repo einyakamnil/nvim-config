@@ -66,8 +66,8 @@ return {
     c = {fg = c.grey }
   },
   inactive = {
-    a = {fg = c.grey, gui = 'bold' },
-    b = {fg = c.grey },
+    a = {fg = c.grey, bg = c.purple, gui = 'bold' },
+    b = {fg = c.grey, bg = c.red },
     c = {fg = c.grey }
   }
 }

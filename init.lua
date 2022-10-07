@@ -6,12 +6,28 @@
 --                                   
 --Load plugins and colorscheme
 require('plugins')
-
+require('custom_funcs')
 local yak = require('yak')
 require('lualine').setup {
     options = {
 	theme = yak,
-	section_separators = { left = " ", right = " " },
+	section_separators = { left = " ", right = " " }
+    },
+    sections = {
+	lualine_a = { "mode" },
+	lualine_b = { "branch", "diff", "diagnostics" },
+	lualine_c = { "filename" },
+	lualine_x = { "encoding", "filetype" },
+	lualine_y = { "progress" },
+	lualine_z = { "location" }
+    },
+    inactive_sections = {
+	lualine_a = { "branch" },
+	lualine_b = { "diff", "diagnostics" },
+	lualine_c = { "filename" },
+	lualine_x = { "filetype" },
+	lualine_y = { "progress" },
+	lualine_z = { "location" }
     }
 }
 
@@ -73,9 +89,6 @@ vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", { noremap = true })
 vim.api.nvim_set_keymap("", "J", "<C-e>", { noremap = true })
 vim.api.nvim_set_keymap("", "K", "<C-y>", { noremap = true })
-
---Load custom functions
-require('custom_funcs')
 
 --Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
