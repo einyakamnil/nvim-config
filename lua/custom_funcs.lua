@@ -1,3 +1,8 @@
+--Function for table printing
+function P(table)
+    print(vim.inspect(table))
+end
+
 --Function for folding
 fold_conf = function(opts)
     vim.o.foldmethod = opts.fdm

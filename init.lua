@@ -341,9 +341,9 @@ vim.api.nvim_create_autocmd("Filetype", {
 --nnoremap ü <C-]>
 --nnoremap Ü <C-t>
 --
-function comment(opts)
+
+function comment(cm)
     line = vim.api.nvim_get_current_line()
-    cm = opts.cm
     if(string.sub(line, 1, 2) == "--")
     then
 	vim.api.nvim_set_current_line(string.sub(line, 3, -1))
@@ -354,8 +354,14 @@ function comment(opts)
     end
 end
 
-function loop_selection(start, fin, func, opts)
-    col = vim.api.nvim_win_get_cursor(0)[2]
+function loop_selection(func, opts)
+    cursor = vim.fn.getpos('.')
+    pos1 = cursor[2]
+    col = cursor[3]
+    pos2 = vim.fn.line('v')
+    start = math.min(pos1, pos2)
+    fin = math.max(pos1, pos2)
+
     for i = start, fin, 1
     do
 	vim.api.nvim_win_set_cursor(0, { i, col })
@@ -364,20 +370,13 @@ function loop_selection(start, fin, func, opts)
 end
 
 vim.keymap.set(
-    'n', '<C-c>',
+    'v', '<C-c>',
     function() loop_selection(
-	    vim.api.nvim_win_get_cursor(0)[1],
-	    vim.api.nvim_win_get_cursor(0)[1],
 	    comment,
-	    { cm = "--" }
+	     "--" 
 	) end
 )
 vim.keymap.set(
-    'v', '<C-c>',
-    function() loop_selection(
-	    vim.api.nvim_buf_get_mark(0, "<")[1],
-	    vim.api.nvim_buf_get_mark(0, ">")[1],
-	    comment,
-	    { cm = "--" }
-	) end
+    'n', '<C-c>',
+    function() comment("--") end
 )
