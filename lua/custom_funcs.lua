@@ -9,21 +9,26 @@ function Reload(module)
     return require(module)
 end
 
---Callback for folding
-fold_conf = function(opts)
-    vim.o.foldmethod = opts.fdm
-    vim.o.foldexpr = opts.fde
+--Callback for setting window options
+function win_opts(opts)
+    for key, val in pairs(opts)
+    do
+	vim.wo[key] = val
+    end
+end
+
+--Callback for buffer options
+function buf_opts(opts)
+    for key, val in pairs(opts)
+    do
+	vim.bo[key] = value
+    end
 end
 
 --Callback for keymapping
 keymap_callback = function(opts)
     vim.keymap.set(opts.mode, opts.key, opts.action, opts._opts)
 end
---Callback for formatoptions
-format_conf = function(opts)
-    vim.bo.formatoptions = opts.fo
-end
-
 --Toggle comment "cm" on current line
 function comment(cm)
     line = vim.api.nvim_get_current_line()

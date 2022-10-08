@@ -83,52 +83,34 @@ vim.api.nvim_set_keymap("v", "<Leader>'", "s'<C-r>\"'<Esc>", { noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>\"", "s\"<C-r>\"\"<Esc>", { noremap = true })
 
 --Faster buffer size and view mainpulation
-vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", { noremap = true })
-vim.api.nvim_set_keymap("", "J", "<C-e>", { noremap = true })
-vim.api.nvim_set_keymap("", "K", "<C-y>", { noremap = true })
+vim.keymap.set("n", "<C-h>", "<C-w>h", { noremap = true })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { noremap = true })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { noremap = true })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true })
+vim.keymap.set("n", "+", "<C-w>+", { noremap = true })
+vim.keymap.set("n", "-", "<C-w>-", { noremap = true })
+vim.keymap.set("n", "<", "<C-w><", { noremap = true })
+vim.keymap.set("n", ">", "<C-w>>", { noremap = true })
+vim.keymap.set("", "J", "<C-e>", { noremap = true })
+vim.keymap.set("", "K", "<C-y>", { noremap = true })
 
 --Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
-	callback = function() fold_conf({
-		    fdm = "expr",
-		    fde = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
+	callback = function() win_opts({
+		    foldmethod = "expr",
+		    foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
 		}) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
-	callback = function() format_conf(
-	    { fo = "cjlqr" }
+	callback = function() buf_opts(
+	    { formatoptions = "cjlqr" }
 	) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<Leader>f",
-		    action = "ofunction ()<CR><++><CR><BS>end<Esc>2kf(a",
-		    _opts = { noremap = true }
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<F4>",
-		    action = ":so /home/linkai/.config/nvim/init.lua<CR>",
-		    _opts = { noremap = true }
-		}) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
@@ -156,29 +138,62 @@ vim.api.nvim_create_autocmd("Filetype", {
 		}) end
     }
 )
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+	pattern = "lua",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<Leader>f",
+		    action = "ofunction (<++>)<CR><++><CR><BS>end<Esc>2kf(i",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+	pattern = "lua",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<F4>",
+		    action = ":so /home/linkai/.config/nvim/init.lua<CR>",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "LUA",
+	pattern = "lua",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<F5>",
+		    action = ":w<CR>:!lua %<CR>",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
 
---Settings for C files.
+--Settings for C and C++ files.
 vim.api.nvim_create_augroup("C", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
-	pattern = "c",
-	callback = function() fold_conf({
-		fdm = "indent",
-		fde = ""
+	pattern = { "c", "cpp" },
+	callback = function() win_opts({
+		foldmethod = "indent",
+		foldexpr = ""
 	    }) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
-	pattern = "c",
-	callback = function() format_conf(
-		{ fo = "cjnqrt" }
+	pattern = { "c", "cpp" },
+	callback = function() buf_opts(
+		{ formatoptions = "cjnqrt" }
 	    ) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
-	pattern = "c",
+	pattern = { "c", "cpp" },
 	callback = function() keymap_callback({
 		    mode = "v",
 		    key = "<C-c>",
@@ -192,7 +207,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 )
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
-	pattern = "c",
+	pattern = { "c", "cpp" },
 	callback = function() keymap_callback({
 		    mode = "n",
 		    key = "<C-c>",
@@ -207,29 +222,18 @@ vim.api.nvim_create_augroup("PYTHON", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "PYTHON",
 	pattern = "python",
-	callback = function() fold_conf({
-		fdm = "indent",
-		fde = ""
+	callback = function() win_opts({
+		foldmethod = "indent",
+		foldexpr = ""
 	    }) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "PYTHON",
 	pattern = "python",
-	callback = function() format_conf(
-		{ fo = "cjnqrt" }
+	callback = function() buf_opts(
+		{ formatoptions = "cjnqrt" }
 	    ) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() keymap_callback({
-		mode = "n",
-		key = "<Leader>f",
-		action = "adef (<++>):<CR>\"\"\"<CR>\"\"\"<Esc>2kF(i",
-		_opts = { noremap = true }
-	    }) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
@@ -257,21 +261,29 @@ vim.api.nvim_create_autocmd("Filetype", {
 		}) end
     }
 )
---autocmd FileType c	nnoremap <buffer> <F5>
---			\ :w<CR>:!clear<CR>:!gcc "%" -o "%:r"<CR>:!./"%:r"<CR>
---"autocmd FileType c inoremap ,main
---"			\ <Esc>:-1r<Space>/home/linkai/Vorlagen/intmain.c<CR>
---"			\2j$Fnla
---
---"<-->
---"Settings for C++ files.
---autocmd FileType cpp setlocal formatoptions=ctnqr
---autocmd FileType cpp map <silent> <C-c> :s/^/\/\//<CR>:noh<CR>
---autocmd FileType cpp map <silent> <C-u> :s/^\s*\/\///<CR>:noh<CR>
---autocmd FileType cpp set cindent
---autocmd FileType cpp inoremap ;cb /*<CR><CR>/<CR><++><Esc>2ka<Space>
---autocmd FileType cpp nnoremap <buffer> <F5>
---			\ :w<CR>:!clear<CR>:!make<CR>
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	callback = function() keymap_callback({
+		mode = "n",
+		key = "<Leader>f",
+		action = "adef (<++>):<CR>\"\"\"<CR>\"\"\"<Esc>2kF(i",
+		_opts = { noremap = true }
+	    }) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "PYTHON",
+	pattern = "python",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<F5>",
+		    action = ":w<CR>:!python3 %<CR>",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+
 --Settings for conf files
 vim.api.nvim_create_augroup("CONF", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
@@ -317,26 +329,14 @@ vim.api.nvim_create_autocmd("Filetype", {
 		}) end
     }
 )
---"Settings for HTML files.
---autocmd FileType html	vmap <silent> <C-c> :s/^/<!--/<CR>:'<,'>s/$/-->/<CR>:noh<CR>
---autocmd FileType html	vmap <silent> <C-u> :s/^\s*<!--//<CR>:'<,'>s/-->$//<CR>:noh<CR>
---autocmd FileType html
---			\ inoremap <expr> <CR> pumvisible() ? "\<C-y>\>\<\/\<C-x>\<C-o>\<Esc>2ba" : "\<C-g>u\<CR>"
---autocmd FileType html	inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
---				\ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
---autocmd FileType html	inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
---				\ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
---autocmd FileType html	inoremap < <<C-x><C-o><C-n>
---
---"<-->
---"Settings for Markdown
+--Settings for Markdown
 vim.api.nvim_create_augroup("MARKDOWN", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "MARKDOWN",
 	pattern = "markdown",
-	callback = function() fold_conf({
-		fdm = "expr",
-		fde = "(getline(v:lnum)=~?'^\\# .*$')?0:(getline(v:lnum-1)=~?'^\\# .*$')||(getline(v:lnum+1)=~?'^\\# .*$')?1:2"
+	callback = function() win_opts({
+		foldmethod = "expr",
+		foldexpr = "(getline(v:lnum)=~?'^\\# .*$')?0:(getline(v:lnum-1)=~?'^\\# .*$')||(getline(v:lnum+1)=~?'^\\# .*$')?1:2"
 	    }) end
     }
 )
@@ -344,28 +344,37 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "MARKDOWN",
     	pattern = "markdown",
-	callback = function() format_conf(
-		{ fo = "cjnqrt" }
+	callback = function() buf_opts(
+		{ formatoptions = "cjnqrt" }
 	) end
     }
 )
---autocmd FileType markdown nnoremap <F5> :w<CR>:!clear<CR>:!pandoc -f markdown -t pdf "%" -o "%:r.pdf"<CR>
---autocmd FileType markdown nnoremap <buffer> <F6> :!zathura --fork "%:r.pdf"<CR><CR>
---autocmd FileType markdown nnoremap <buffer> <F6> :!zathura --fork "%:r.pdf"<CR><CR>
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "MARKDOWN",
+	pattern = "markdown",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<F5>",
+		    action = ":w<CR>:!pandoc -f markdown -t pdf % -o %:r.pdf<CR>",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "MARKDOWN",
+	pattern = "markdown",
+	callback = function() keymap_callback({
+		    mode = "n",
+		    key = "<F6>",
+		    action = ":w<CR>:!zathura --fork %:r.pdf<CR>",
+		    _opts = { noremap = true }
+		}) end
+    }
+)
 --autocmd FileType markdown set formatoptions+=r
 --autocmd FileType markdown set comments=b:*,b:-,b:+,n:>
 --autocmd FileType markdown inoremap ;t <Esc>:r $HOME/Vorlagen/latex/traum.md<CR>ggdd/<++><CR>:noh<CR>"_c4l
 --autocmd FileType markdown inoremap ;% <C-r>%<Esc>dF.x
---
---"<-->
---"Settings for Python files.
---"Save and execute Python script from inside vim using F5.
---autocmd FileType python
---			\ nnoremap <buffer> <F5> :w<CR>:!clear<CR>:exec '!python3' shellescape(@%, 1)<CR>
---autocmd FileType python	inoremap ;d """<CR>"""<CR><++><Esc>2ka
---autocmd FileType python	inoremap ;> >>><Tab>
---
---
 --"<-->
 --"Settings for sh files.
 --autocmd FileType sh	map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
@@ -422,27 +431,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 --"Auto-continue \item
 --autocmd FileType tex setlocal formatoptions=ctnqr
 --autocmd FileType tex setlocal comments+=n:\\item,n:\\usepackage
---
---"<-->
---"Jump to <++>. use ";<" to quickly make this tag.
---"inoremap <Space><Space> <Esc>/<++><CR>:noh<CR>"_c4l
---inoremap <C-c> <Esc>/<++><CR>:noh<CR>"_c4l
---inoremap ;< <++><Esc>
---
---"<-->
---"Better key bindings to navigate/resize splitscreens.
---nnoremap + <C-w>+
---nnoremap - <C-w>-
---nnoremap < <C-w><
---nnoremap > <C-w>>
---
---"<-->
---"scrolling
---inoremap <C-j> <C-o><C-e>
---inoremap <C-k> <C-o><C-y>
---
---"Save clipboard upon exiting vim.
---autocmd VimLeave * call system("xclip -selection clipboard -i", getreg('+'))
 --
 --"<-->
 --"ctags stuff
