@@ -289,9 +289,9 @@ vim.api.nvim_create_augroup("CONF", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "CONF",
 	pattern = "conf",
-	callback = function() fold_conf({
-		fdm = "expr",
-		fde = "(getline(v:lnum)=~?'^\\#.*$')?0:(getline(v:lnum-1)=~?'^\\#.*$')||(getline(v:lnum+1)=~?'^\\#.*$')?1:2"
+	callback = function() win_opts({
+		foldmethod = "expr",
+		foldexpr = "(getline(v:lnum)=~?'^\\#.*$')?0:(getline(v:lnum-1)=~?'^\\#.*$')||(getline(v:lnum+1)=~?'^\\#.*$')?1:2"
 	}) end
     }
 )
@@ -299,8 +299,8 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "CONF",
     	pattern = "conf",
-	callback = function() format_conf(
-		{ fo = "cjnqrt" }
+	callback = function() buf_opts(
+		{ formatoptions = "cjnqrt" }
 	) end
     }
 )

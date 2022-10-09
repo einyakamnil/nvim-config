@@ -47,22 +47,22 @@ return {
   },
   insert = {
     a = {fg = c.purple, bg = c.lightblue, gui = 'bold'},
-    b = {fg = c.lightgray, bg = c.white},
-    c = {fg = c.lightgray, bg = c.white}
+    b = {fg = c.black, bg = c.green},
+    c = {fg = c.grey }
   },
   visual = {
     a = {fg = c.purple, bg = c.orange, gui = 'bold'},
-    b = {fg = c.lightgray, bg = c.white},
-    c = {fg = c.inactivegray, bg = c.black}
+    b = {fg = c.black, bg = c.green},
+    c = {fg = c.grey }
   },
   replace = {
     a = {fg = c.red, bg = c.black, gui = 'bold'},
-    b = {fg = c.lightgray, bg = c.white},
-    c = {fg = c.black, bg = c.white}
+    b = {fg = c.black, bg = c.green},
+    c = {fg = c.grey }
   },
   command = {
     a = {fg = c.purple, bg = c.green, gui = 'bold' },
-    b = {fg = c.grey },
+    b = {fg = c.black, bg = c.green},
     c = {fg = c.grey }
   },
   inactive = {
