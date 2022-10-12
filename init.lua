@@ -105,7 +105,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 		}) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
+vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	group = "LUA",
 	pattern = "lua",
 	callback = function() buf_opts(
@@ -183,7 +183,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    }) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
+vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	group = "C",
 	pattern = { "c", "cpp" },
 	callback = function() buf_opts(
@@ -228,7 +228,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    }) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
+vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	group = "PYTHON",
 	pattern = "python",
 	callback = function() buf_opts(
@@ -296,7 +296,7 @@ vim.api.nvim_create_autocmd("Filetype", {
     }
 )
 
-vim.api.nvim_create_autocmd("Filetype", {
+vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	group = "CONF",
     	pattern = "conf",
 	callback = function() buf_opts(
@@ -341,7 +341,7 @@ vim.api.nvim_create_autocmd("Filetype", {
     }
 )
 
-vim.api.nvim_create_autocmd("Filetype", {
+vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	group = "MARKDOWN",
     	pattern = "markdown",
 	callback = function() buf_opts(
