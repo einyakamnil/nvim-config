@@ -344,9 +344,10 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	group = "MARKDOWN",
     	pattern = "markdown",
-	callback = function() buf_opts(
-		{ formatoptions = "cjnqrt" }
-	) end
+	callback = function() buf_opts({
+		formatoptions = "cjnqrt",
+		comments = "b:+,b:-,b:*"
+	}) end
     }
 )
 vim.api.nvim_create_autocmd("Filetype", {
