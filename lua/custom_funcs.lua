@@ -21,7 +21,7 @@ end
 function buf_opts(opts)
     for key, val in pairs(opts)
     do
-	vim.bo[key] = value
+	vim.bo[key] = val
     end
 end
 

@@ -340,8 +340,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    }) end
     }
 )
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
+vim.api.nvim_create_autocmd("Filetype", {
 	group = "MARKDOWN",
     	pattern = "markdown",
 	callback = function() buf_opts({
