@@ -27,7 +27,10 @@ end
 
 --Callback for keymapping
 keymap_callback = function(opts)
-    vim.keymap.set(opts.mode, opts.key, opts.action, opts._opts)
+    for i, map in ipairs(opts)
+    do
+	vim.keymap.set(map.mode, map.key, map.action, map._map)
+    end
 end
 --Toggle comment "cm" on current line
 function comment(cm)
@@ -43,6 +46,7 @@ function comment(cm)
     end
 end
 
+--Repeat functions of normal mode in visual mode on all selected lines
 function loop_selection(func, opts)
     cursor = vim.fn.getpos('.')
     start = cursor[2]

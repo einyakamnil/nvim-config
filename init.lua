@@ -67,9 +67,9 @@ vim.api.nvim_set_keymap("i", "[", "[]<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "{", "{}<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "'", "''<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "\"", "\"\"<++><Esc>4hi", { noremap = true })
-vim.api.nvim_set_keymap("i", "(<CR>", "(<CR>)<CR><++><Esc>kO", { noremap = true })
-vim.api.nvim_set_keymap("i", "[<CR>", "[<CR>]<CR><++><Esc>kO", { noremap = true })
-vim.api.nvim_set_keymap("i", "{<CR>", "{<CR>}<CR><++><Esc>kO", { noremap = true })
+vim.api.nvim_set_keymap("i", "(<CR>", "(<CR>)<++><Esc>O", { noremap = true })
+vim.api.nvim_set_keymap("i", "[<CR>", "[<CR>]<++><Esc>O", { noremap = true })
+vim.api.nvim_set_keymap("i", "{<CR>", "{<CR>}<++><Esc>O", { noremap = true })
 vim.api.nvim_set_keymap("i", "((", "(", { noremap = true })
 vim.api.nvim_set_keymap("i", "[[", "[", { noremap = true })
 vim.api.nvim_set_keymap("i", "{{", "{", { noremap = true })
@@ -105,7 +105,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 		}) end
     }
 )
-vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
+vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
 	callback = function() buf_opts(
@@ -113,62 +113,45 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "v",
-		    key = "<C-c>",
-		    action = function() loop_selection(
-			    comment,
-			     "--" 
-			) end,
-		    _opts = { noremap = true }
-		}) end
+local lua_keymaps = {
+    {
+	mode = "n",
+	key = "<C-c>",
+	action = function() comment("--") end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "v",
+	key = "<C-c>",
+	action = function() loop_selection(
+		comment,
+		"--" 
+		) end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<Leader>f",
+	action = "ofunction (<++>)<CR><++><CR><BS>end<Esc>2kf(i",
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F4>",
+	action = ":so /home/linkai/.config/nvim/init.lua<CR>",
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F5>",
+	action = ":w<CR>:!lua %<CR>",
+	_opts = { noremap = true }
     }
-)
+}
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<C-c>",
-		    action = function() comment("--") end,
-		    _opts = { noremap = true }
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<Leader>f",
-		    action = "ofunction (<++>)<CR><++><CR><BS>end<Esc>2kf(i",
-		    _opts = { noremap = true }
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<F4>",
-		    action = ":so /home/linkai/.config/nvim/init.lua<CR>",
-		    _opts = { noremap = true }
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<F5>",
-		    action = ":w<CR>:!lua %<CR>",
-		    _opts = { noremap = true }
-		}) end
+	callback = function() keymap_callback(lua_keymaps) end
     }
 )
 
@@ -183,7 +166,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    }) end
     }
 )
-vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
+vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
 	pattern = { "c", "cpp" },
 	callback = function() buf_opts(
@@ -191,29 +174,27 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	    ) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "C",
-	pattern = { "c", "cpp" },
-	callback = function() keymap_callback({
-		    mode = "v",
-		    key = "<C-c>",
-		    action = function() loop_selection(
-			    comment,
-			     "//" 
-			) end,
-		    _opts = { noremap = true }
-		}) end
+local c_keymaps = {
+    {
+	mode = "v",
+	key = "<C-c>",
+	action = function() loop_selection(
+		comment,
+		"//" 
+		) end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<C-c>",
+	action = function() comment("//") end,
+	_opts = { noremap = true }
     }
-)
+}
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
 	pattern = { "c", "cpp" },
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<C-c>",
-		    action = function() comment("//") end,
-		    _opts = { noremap = true }
-		}) end
+	callback = function() keymap_callback(c_keymaps) end
     }
 )
 
@@ -228,7 +209,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 	    }) end
     }
 )
-vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
+vim.api.nvim_create_autocmd("Filetype", {
 	group = "PYTHON",
 	pattern = "python",
 	callback = function() buf_opts(
@@ -236,51 +217,39 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	    ) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() keymap_callback({
-		    mode = "v",
-		    key = "<C-c>",
-		    action = function() loop_selection(
-			    comment,
-			     "#" 
-			) end,
-		    _opts = { noremap = true }
-		}) end
+local python_keymaps = {
+    {
+	mode = "n",
+	key = "<Leader>f",
+	action = "adef (<++>):<CR>\"\"\"<CR>\"\"\"<Esc>2kF(i",
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<C-c>",
+	action = function() comment("#") end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "v",
+	key = "<C-c>",
+	action = function() loop_selection(
+		comment,
+		"#" 
+		) end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F5>",
+	action = ":w<CR>:!python3 %<CR>",
+	_opts = { noremap = true }
     }
-)
+}
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "PYTHON",
 	pattern = "python",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<C-c>",
-		    action = function() comment("#") end,
-		    _opts = { noremap = true }
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() keymap_callback({
-		mode = "n",
-		key = "<Leader>f",
-		action = "adef (<++>):<CR>\"\"\"<CR>\"\"\"<Esc>2kF(i",
-		_opts = { noremap = true }
-	    }) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<F5>",
-		    action = ":w<CR>:!python3 %<CR>",
-		    _opts = { noremap = true }
-		}) end
+	callback = function() keymap_callback(python_keymaps) end
     }
 )
 
@@ -304,31 +273,31 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost" }, {
 	) end
     }
 )
+
+local conf_keymaps = {
+    {
+	mode = "n",
+	key = "<C-c>",
+	action = function() comment("#") end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "v",
+	key = "<C-c>",
+	action = function() loop_selection(
+		comment,
+		"#" 
+		) end,
+	_opts = { noremap = true }
+    }
+}
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "CONF",
     	pattern = "conf",
-	callback = function() keymap_callback({
-		    mode = "v",
-		    key = "<C-c>",
-		    action = function() loop_selection(
-			    comment,
-			     "#" 
-			) end,
-		    _opts = { noremap = true }
-		}) end
+	callback = function() keymap_callback(conf_keymaps) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "CONF",
-    	pattern = "conf",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<C-c>",
-		    action = function() comment("#") end,
-		    _opts = { noremap = true }
-		}) end
-    }
-)
+
 --Settings for Markdown
 vim.api.nvim_create_augroup("MARKDOWN", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
@@ -349,26 +318,25 @@ vim.api.nvim_create_autocmd("Filetype", {
 	}) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "MARKDOWN",
-	pattern = "markdown",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<F5>",
-		    action = ":w<CR>:!pandoc -f markdown -t pdf % -o %:r.pdf<CR>",
-		    _opts = { noremap = true }
-		}) end
+
+local = md_keymaps = {
+    {
+	mode = "n",
+	key = "<F5>",
+	action = ":w<CR>:!pandoc -f markdown -t pdf % -o %:r.pdf<CR>",
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F6>",
+	action = ":w<CR>:!zathura --fork %:r.pdf<CR>",
+	_opts = { noremap = true }
     }
-)
+}
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "MARKDOWN",
 	pattern = "markdown",
-	callback = function() keymap_callback({
-		    mode = "n",
-		    key = "<F6>",
-		    action = ":w<CR>:!zathura --fork %:r.pdf<CR>",
-		    _opts = { noremap = true }
-		}) end
+	callback = function() keymap_callback(md_keymaps) end
     }
 )
 --autocmd FileType markdown set formatoptions+=r
