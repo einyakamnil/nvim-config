@@ -368,7 +368,7 @@ local md_keymaps = {
 }
 
 vim.api.nvim_create_autocmd("Filetype", {
-	group = "SHLL",
+	group = "SHELL",
 	pattern = { "sh", "bash", "zsh" },
 	callback = function() keymap_callback(sh_keymaps) end
 	}
