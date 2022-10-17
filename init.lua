@@ -1,9 +1,8 @@
---			 _
--- _ ___  ___  _____   _(_)_ __ ____  
---| '_  \/ _ \/ _ \ \ / / | '_ ` _  \ 
---| | | |  __/ (_) \ V /| | | | | | |
---|_| |_|\___|\___/ \_/ |_|_| |_| |_|
---                                   
+--    _   __                _         
+--   / | / /__  ____ _   __(_)___ ___ 
+--  /  |/ / _ \/ __ \ | / / / __ `__ \
+-- / /|  /  __/ /_/ / |/ / / / / / / /
+--/_/ |_/\___/\____/|___/_/_/ /_/ /_/ 
 --Load plugins and colorscheme
 require('plugins')
 require('custom_funcs')
@@ -65,6 +64,9 @@ vim.api.nvim_set_keymap("i", "<C-c>", "<Esc>/<++><CR>\"_c4l", { noremap = true }
 vim.api.nvim_set_keymap("i", "(", "()<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "[", "[]<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "{", "{}<++><Esc>4hi", { noremap = true })
+vim.api.nvim_set_keymap("i", "()", "()", { noremap = true })
+vim.api.nvim_set_keymap("i", "[]", "[]", { noremap = true })
+vim.api.nvim_set_keymap("i", "{}", "{}", { noremap = true })
 vim.api.nvim_set_keymap("i", "'", "''<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "\"", "\"\"<++><Esc>4hi", { noremap = true })
 vim.api.nvim_set_keymap("i", "(<CR>", "(<CR>)<++><Esc>O", { noremap = true })
@@ -342,8 +344,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 
 --Settings for Shell files
 vim.api.nvim_create_augroup("SHELL", { clear = true })
-
-local md_keymaps = {
+local sh_keymaps = {
     {
 	mode = "n",
 	key = "<C-c>",
@@ -366,12 +367,11 @@ local md_keymaps = {
 	_opts = { noremap = true }
     }
 }
-
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "SHELL",
 	pattern = { "sh", "bash", "zsh" },
 	callback = function() keymap_callback(sh_keymaps) end
-	}
+    }
 )
 --autocmd FileType markdown inoremap ;t <Esc>:r $HOME/Vorlagen/latex/traum.md<CR>ggdd/<++><CR>:noh<CR>"_c4l
 --autocmd FileType markdown inoremap ;% <C-r>%<Esc>dF.x
@@ -436,3 +436,4 @@ vim.api.nvim_create_autocmd("Filetype", {
 --"ctags stuff
 --nnoremap ü <C-]>
 --nnoremap Ü <C-t>
+                                    
