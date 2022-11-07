@@ -373,6 +373,43 @@ vim.api.nvim_create_autocmd("Filetype", {
 	callback = function() keymap_callback(sh_keymaps) end
     }
 )
+--Settings for LaTeX files
+vim.api.nvim_create_augroup("TEX", { clear = true })
+local tex_keymaps = {
+    {
+	mode = "n",
+	key = "<C-c>",
+	action = function() comment("%") end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "v",
+	key = "<C-c>",
+	action = function() loop_selection(
+		comment,
+		"%" 
+		) end,
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F5>",
+	action = ":w<CR>:!pdflatex %<CR>",
+	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F6>",
+	action = ":w<CR>:!zathura %:r.pdf & disown<CR><CR>",
+	_opts = { noremap = true }
+    }
+}
+vim.api.nvim_create_autocmd("Filetype", {
+	group = "TEX",
+	pattern = { "tex", "plaintex" },
+	callback = function() keymap_callback(tex_keymaps) end
+    }
+)
 --autocmd FileType markdown inoremap ;t <Esc>:r $HOME/Vorlagen/latex/traum.md<CR>ggdd/<++><CR>:noh<CR>"_c4l
 --autocmd FileType markdown inoremap ;% <C-r>%<Esc>dF.x
 --"<-->
