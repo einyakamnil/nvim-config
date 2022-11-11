@@ -402,6 +402,12 @@ local tex_keymaps = {
 	key = "<F6>",
 	action = ":w<CR>:!zathura %:r.pdf & disown<CR><CR>",
 	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<Leader>b",
+	action = function() tex_begin() end,
+	_opts = { noremap = true }
     }
 }
 vim.api.nvim_create_autocmd("Filetype", {

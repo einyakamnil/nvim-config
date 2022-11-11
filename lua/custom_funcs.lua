@@ -1,3 +1,5 @@
+--local variables
+local api = vim.api
 --Easy table printing
 function P(table)
     print(vim.inspect(table))
@@ -34,14 +36,14 @@ keymap_callback = function(opts)
 end
 --Toggle comment "cm" on current line
 function comment(cm)
-    line = vim.api.nvim_get_current_line()
+    line = api.nvim_get_current_line()
     cmlen = string.len(cm)
     if(string.sub(line, 1, cmlen) == cm)
     then
-	vim.api.nvim_set_current_line(string.sub(line, cmlen + 1, -1))
+	api.nvim_set_current_line(string.sub(line, cmlen + 1, -1))
 
     else
-	vim.api.nvim_set_current_line(cm .. line)
+	api.nvim_set_current_line(cm .. line)
 
     end
 end
@@ -62,9 +64,20 @@ function loop_selection(func, opts)
 
     for i = start, fin, inc
     do
-	vim.api.nvim_win_set_cursor(0, { i, col })
+	api.nvim_win_set_cursor(0, { i, col })
 	func(opts)
     end
     
-    vim.api.nvim_win_set_cursor(0, { start, col })
+    api.nvim_win_set_cursor(0, { start, col })
+end
+
+--Automatically end latex segments
+function tex_begin()
+    pos = api.nvim_win_get_cursor(0)
+    b = "\\begin{<++>}"
+    e = "\\end{<++>}"
+    api.nvim_buf_set_lines(0, pos[1], pos[1], false, { b, e })
+    pos[1] = pos[1] + 1
+    api.nvim_win_set_cursor(0, pos)
+    api.nvim_feedkeys("vj:s/<++>/", "n", true)
 end
