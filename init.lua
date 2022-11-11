@@ -191,6 +191,12 @@ local c_keymaps = {
 	key = "<C-c>",
 	action = function() comment("//") end,
 	_opts = { noremap = true }
+    },
+    {
+	mode = "n",
+	key = "<F5>",
+	action = ":w<CR>:!gcc % -o %:r<CR>!./%:r<CR>",
+	_opts = { noremap = true }
     }
 }
 vim.api.nvim_create_autocmd("Filetype", {
