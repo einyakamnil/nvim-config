@@ -62,9 +62,6 @@ vim.api.nvim_set_keymap("n", "z", "zA", { noremap = true })
 --Jump to tag signs
 vim.api.nvim_set_keymap("i", "<C-c>", "<Esc>/<++><CR>\"_c4l", { noremap = true })
 
---Show registers when trying to paste from one
-vim.api.nvim_set_keymap("i", "<C-r>", "<C-o>:lua show_reg_win()<CR><C-r>", { noremap = true })
---vim.api.nvim_set_keymap("n", "\"", "<C-o>:lua show_reg_win()", { noremap = true })
 
 --Automatic brackets and quotes
 vim.api.nvim_set_keymap("i", "(", "()<++><Esc>4hi", { noremap = true })
@@ -491,3 +488,4 @@ vim.api.nvim_create_autocmd("Filetype", {
 --"ctags stuff
 --nnoremap ü <C-]>
 --nnoremap Ü <C-t>
+
