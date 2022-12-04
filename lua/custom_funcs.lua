@@ -13,24 +13,21 @@ end
 
 --Callback for setting window options
 function win_opts(opts)
-    for key, val in pairs(opts)
-    do
+    for key, val in pairs(opts) do
 	vim.wo[key] = val
     end
 end
 
 --Callback for buffer options
 function buf_opts(opts)
-    for key, val in pairs(opts)
-    do
+    for key, val in pairs(opts) do
 	vim.bo[key] = val
     end
 end
 
 --Callback for keymapping
 keymap_callback = function(opts)
-    for i, map in ipairs(opts)
-    do
+    for i, map in ipairs(opts) do
 	vim.keymap.set(map.mode, map.key, map.action, map._map)
     end
 end
@@ -38,8 +35,7 @@ end
 function comment(cm)
     line = api.nvim_get_current_line()
     cmlen = string.len(cm)
-    if(string.sub(line, 1, cmlen) == cm)
-    then
+    if(string.sub(line, 1, cmlen) == cm) then
 	api.nvim_set_current_line(string.sub(line, cmlen + 1, -1))
 
     else
@@ -55,15 +51,13 @@ function loop_selection(func, opts)
     col = cursor[3]
     fin = vim.fn.line('v')
 
-    if(fin > start)
-    then
+    if(fin > start) then
 	inc = 1
     else
 	inc = -1
     end
 
-    for i = start, fin, inc
-    do
+    for i = start, fin, inc do
 	api.nvim_win_set_cursor(0, { i, col })
 	func(opts)
     end

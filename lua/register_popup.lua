@@ -22,10 +22,8 @@ function show_reg_win()
     
     for r=1,#(show_regs) do
         local rcontent = get_reg(show_regs[r])
-        if (not(rcontent == nil))
-        then
-	    if string.len(rcontent) > max_str_len
-	    then
+        if (not(rcontent == nil)) then
+	    if string.len(rcontent) > max_str_len then
 		max_str_len = string.len(rcontent)
 	    end
     	    api.nvim_buf_set_lines(
