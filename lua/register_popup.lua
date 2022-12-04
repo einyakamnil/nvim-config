@@ -7,7 +7,7 @@ api.nvim_buf_set_name(reg_popbuf, popname)
 
 --functions to show and close specified registers in a popup
 local function get_reg(r)
-    return vim.fn.getreg(r):gsub("[\n\r]", "\\n")
+    return vim.fn.getreg(r):gsub("[\n\r]", " ")
 end
 
 function close_reg_pop()
@@ -48,15 +48,21 @@ function show_reg_win()
     )
     api.nvim_win_set_option(reg_popwin, "foldenable", false)
     api.nvim_win_set_option(reg_popwin, "foldmethod", "manual")
-    au_regpop = api.nvim_create_autocmd("TextChangedI",  {
+    au_regpop = api.nvim_create_autocmd(
+	{
+	    "TextChanged",
+	    "CursorMoved",
+	    "TextChangedI",
+	    "CursorMovedI",
+	}, {
 	   group = "REG_POPUP",
-    	   pattern = "*",
-    	   callback = close_reg_pop,
+	   pattern = "*",
+	   callback = close_reg_pop,
 	   once = true
 	}
     )
 end
 
 --Show registers when trying to paste from one
-vim.api.nvim_set_keymap("i", "<C-r>", "<C-o>:lua show_reg_win()<CR><C-r>", { noremap = true })
---vim.api.nvim_set_keymap("n", "\"", "<C-o>:lua show_reg_win()", { noremap = true })
+vim.keymap.set("i", "<C-r>", "<C-o>:lua show_reg_win()<CR><C-r>", { noremap = true })
+vim.keymap.set("n", "\"", ":lua show_reg_win()<CR>\"", { noremap = true })
