@@ -95,8 +95,8 @@ vim.keymap.set("n", "+", "<C-w>+", { noremap = true })
 vim.keymap.set("n", "-", "<C-w>-", { noremap = true })
 vim.keymap.set("n", "<", "<C-w><", { noremap = true })
 vim.keymap.set("n", ">", "<C-w>>", { noremap = true })
-vim.keymap.set("", "J", "<C-e>", { noremap = true })
-vim.keymap.set("", "K", "<C-y>", { noremap = true })
+vim.keymap.set("n", "J", "<C-e>", { noremap = true })
+vim.keymap.set("n", "K", "<C-y>", { noremap = true })
 
 --Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
