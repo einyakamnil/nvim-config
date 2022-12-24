@@ -5,7 +5,7 @@
 --/_/ |_/\___/\____/|___/_/_/ /_/ /_/ 
 --Load plugins and colorscheme
 require('plugins')
-require('custom_funcs')
+require('utils')
 require("register_popup")
 local yak = require('yak')
 require('lualine').setup {
