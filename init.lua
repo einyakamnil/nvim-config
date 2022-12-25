@@ -426,10 +426,24 @@ vim.api.nvim_create_autocmd("Filetype", {
 )
 
 --Testing custom indenter
-
 --local function check_indent()
---    l = tostring(vim.api.nvim_get_current_line())
---    print(l)
+--    local cur_pos = vim.api.nvim_win_get_cursor(0)
+--    local context = vim.api.nvim_buf_get_lines(
+--	0,
+--	cur_pos[1] - 2,
+--	cur_pos[1],
+--	true
+--    )
+--    _, ind_prev = string.find(context[1], "^%s*")
+--    _, ind_current = string.find(context[2], "^%s*")
+--    if (string.find(context[1], "function")) then
+--
+--    if(ind_prev ~= ind_current) then
+--	print(string.match(context[1], "^%s*") .. string.sub(context[2], ind_current+1, -1))
+--	vim.api.nvim_set_current_line(string.match(context[1], "^%s*") .. string.sub(context[2], ind_current+1, -1))
+--	vim.api.nvim_win_set_cursor(0, { cur_pos[1], ind_prev + 1 })
+--    end
+--    end
 --end
 --
 --vim.api.nvim_create_augroup("indenter", { clear = true })
