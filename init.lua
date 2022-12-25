@@ -15,7 +15,7 @@ require('lualine').setup {
     },
     sections = {
 	lualine_a = { "mode" },
-	lualine_b = { "branch", "diff", "diagnostics" },
+	lualine_b = { "branch", "diagnostics" },
 	lualine_c = { "filename" },
 	lualine_x = { "encoding", "filetype" },
 	lualine_y = { "progress" },
@@ -424,67 +424,17 @@ vim.api.nvim_create_autocmd("Filetype", {
 	callback = function() keymap_callback(tex_keymaps) end
     }
 )
---autocmd FileType markdown inoremap ;t <Esc>:r $HOME/Vorlagen/latex/traum.md<CR>ggdd/<++><CR>:noh<CR>"_c4l
---autocmd FileType markdown inoremap ;% <C-r>%<Esc>dF.x
---"<-->
---"Settings for sh files.
---autocmd FileType sh	map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
---autocmd FileType sh	map <silent> <C-u> :s/^\s*\#//<CR>:noh<CR>
---autocmd FileType sh	nnoremap <silent> <F5> :w!<CR>:!clear<CR>:!sh %<CR>
---autocmd FileType sh	set formatoptions+=r
---
---"<-->
---"Settings for zsh files.
---autocmd FileType zsh	map <silent> <C-c> :s/^/\#/<CR>:noh<CR>
---autocmd FileType zsh	map <silent> <C-u> :s/^\s*\#//<CR>:noh<CR>
---autocmd FileType zsh	nnoremap <silent> <F5> :w!<CR>:!clear<CR>:!zsh %<CR>
---autocmd FileType zsh	set formatoptions+=r
---
---"<-->
---"Settings for LaTeX files.
---"Compile .tex file using <F5> and open with <F6> in Windows.
---"Uncomment command below it,to use it in Linux.
---"replace "zathura" with your own pdf viewer.
---autocmd FileType plaintex	nnoremap <buffer> <F5> :w<CR>:!pdflatex "%" > /dev/null 2>&1 &<CR><CR>
---autocmd FileType plaintex	nnoremap <buffer> <F6> :!zathura --fork "%:r".pdf<CR><CR>
---
---"Commenting in a .tex file.
---autocmd FileType plaintex map <silent> <C-c> :s/^/\%/<CR>:noh<CR>
---autocmd FileType plaintex map <silent> <C-u> :s/^\s*%//<CR>:noh<CR>
---autocmd FileType plaintex inoremap $ $$<Space><++><Esc>5hi
---autocmd FileType plaintex inoremap $$ $
---autocmd FileType plaintex inoremap ` ``'' <++><Esc>F`a
---autocmd FileType plaintex inoremap ,qq \glqq\grqq{}<Space><++><Esc>F\i<Space>
---autocmd FileType plaintex inoremap ,begin \begin{<CR><BS>\end{<Esc><C-v>$kA
---autocmd FileType plaintex inoremap ,tmplt
---			\ <Esc>:-1r<Space>/home/linkai/Vorlagen/template.tex<CR>
---
---"Auto-continue \item
---autocmd FileType plaintex setlocal formatoptions=ctnqr
---autocmd FileType plaintex setlocal comments+=n:\\item,n:\\usepackage
---
---"<-->
---"Same settings for ft=tex
---autocmd FileType tex nnoremap <buffer> <F5> :w<CR>:!pdflatex "%" > /dev/null 2>&1 &<CR><CR>
---autocmd FileType tex nnoremap <buffer> <F6> :!zathura --fork "%:r".pdf<CR><CR>
---
---"Commenting in a .tex file.
---autocmd FileType tex map <silent> <C-c> :s/^/\%/<CR>:noh<CR>
---autocmd FileType tex map <silent> <C-u> :s/^\s*%//<CR>:noh<CR>
---autocmd FileType tex inoremap $ $$<Space><++><Esc>5hi
---autocmd FileType tex inoremap $$ $
---autocmd FileType tex inoremap ` ``'' <++><Esc>F`a
---autocmd FileType tex inoremap ,qq \glqq\grqq{}<Space><++><Esc>F\i<Space>
---autocmd FileType tex inoremap ,begin \begin{<CR><BS>\end{<Esc><C-v>$kA
---autocmd FileType tex inoremap ,tmplt
---			\ <Esc>:-1r<Space>/home/linkai/Vorlangen/template.tex<CR>
---
---"Auto-continue \item
---autocmd FileType tex setlocal formatoptions=ctnqr
---autocmd FileType tex setlocal comments+=n:\\item,n:\\usepackage
---
---"<-->
---"ctags stuff
---nnoremap ü <C-]>
---nnoremap Ü <C-t>
 
+--Testing custom indenter
+
+--local function check_indent()
+--    l = tostring(vim.api.nvim_get_current_line())
+--    print(l)
+--end
+--
+--vim.api.nvim_create_augroup("indenter", { clear = true })
+--vim.api.nvim_create_autocmd("TextChangedI", {
+--	group = "indenter",
+--	callback = function() check_indent() end
+--    }
+--)
