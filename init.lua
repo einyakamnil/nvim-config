@@ -100,23 +100,7 @@ vim.keymap.set("n", "K", "<C-y>", { noremap = true })
 
 --Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() win_opts({
-		    foldmethod = "expr",
-		    foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() buf_opts(
-	    { formatoptions = "cjlqr" }
-	) end
-    }
-)
+local lua_ind_pttrn = { "[%(%{%[]$", "function", "^%s*if.*then$", "^%s*else$", "^%s*elseif$" }
 local lua_keymaps = {
     {
 	mode = "n",
@@ -152,10 +136,45 @@ local lua_keymaps = {
 	_opts = { noremap = true }
     }
 }
+vim.api.nvim_create_autocmd(
+    "Filetype",
+    {
+	group = "LUA",
+	pattern = "lua",
+	callback = function() win_opts({
+		    foldmethod = "expr",
+		    foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
+		}) end
+    }
+)
 vim.api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
+	callback = function() buf_opts(
+	    { formatoptions = "cjlqr" }
+	) end
+    }
+)
+vim.api.nvim_create_autocmd(
+    "Filetype",
+    {
+        group = "LUA",
+	pattern = "lua",
 	callback = function() keymap_callback(lua_keymaps) end
+    }
+)
+vim.api.nvim_create_autocmd(
+    "Filetype",
+    {
+        group = "LUA",
+        pattern = "lua",
+        callback = function() vim.api.nvim_create_autocmd(
+            "TextChangedI",
+	    {
+	        group = "indenter",
+	        callback = function() check_indent(lua_ind_pttrn) end
+	    }
+            ) end
     }
 )
 
@@ -425,41 +444,3 @@ vim.api.nvim_create_autocmd("Filetype", {
     }
 )
 
---Testing custom indenter
-local function str_in_line(line, pttrns)
-    for _, p in ipairs(pttrns) do
-        if(string.find(line, p)) then
-            return true
-        end
-    end
-
-    return false
-end
-
-local function check_indent()
-    pttrns = { "[({[]$", "function", "^%s*if.*then$" }
-    local cur_pos = vim.api.nvim_win_get_cursor(0)
-    local context = vim.api.nvim_buf_get_lines(
-	0,
-	cur_pos[1] - 2,
-	cur_pos[1],
-	true
-    )
-    _, ind_prev = string.find(context[1], "^%s*")
-    _, ind_current = string.find(context[2], "^%s*")
---    if (not(string.find(context[1], "function"))) then
-    if(not(str_in_line(context[1], pttrns))) then
-	if(ind_prev ~= ind_current) then
-	    print(string.match(context[1], "^%s*") .. string.sub(context[2], ind_current+1, -1))
-	    vim.api.nvim_set_current_line(string.match(context[1], "^%s*") .. string.sub(context[2], ind_current+1, -1))
-	    vim.api.nvim_win_set_cursor(0, { cur_pos[1], cur_pos[2] + ind_prev - ind_current })
-    end
-    end
-end
-
-vim.api.nvim_create_augroup("indenter", { clear = true })
-vim.api.nvim_create_autocmd("TextChangedI", {
-	group = "indenter",
-	callback = function() check_indent() end
-    }
-)
