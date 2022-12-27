@@ -1,5 +1,22 @@
---local variables
+--local variables and helper functions
+local M = {}
 local api = vim.api
+
+local function getline(lnum)
+    -- Returns the specified line number of the current buffer
+    return tostring(api.nvim_buf_get_lines(0, lnum - 1, lnum, true)[1])
+end
+
+local function str_in_line(line, pttrns)
+    for _, p in ipairs(pttrns) do
+        if(string.find(line, p)) then
+            return true
+        end
+    end
+
+    return false
+end
+
 --Easy table printing
 function P(table)
     print(vim.inspect(table))
@@ -76,39 +93,30 @@ function tex_begin()
     api.nvim_feedkeys("vj:s/<++>/", "n", true)
 end
 --Custom indenter
-api.nvim_create_augroup("indenter", { clear = true })
-function str_in_line(line, pttrns)
-    for _, p in ipairs(pttrns) do
-        if(string.find(line, p)) then
-            return true
-        end
+function M.lua_indentexpr()
+    local pttrn = { "[%(%{%[]$", "function", "^%s*if.*then$", "^%s*else$", "^%s*elseif$", "^%s*for.*do$" }
+    local curpos = api.nvim_win_get_cursor(0)
+    local prevlnum = vim.fn.prevnonblank(curpos[1] - 1)
+
+    if(prevlnum == 0) then
+	return 0
     end
 
-    return false
+    local ind = vim.fn.indent(prevlnum)
+    local prevl = getline(prevlnum)
+    local pidx = str_in_line(prevl, pttrn)
+
+    print(pidx)
+    if(pidx) then
+	return ind + vim.o.shiftwidth
+    else
+	return 0
+    end
+
+    print(pidx)
 end
 
-function check_indent(pttrns)
-    local cur_pos = api.nvim_win_get_cursor(0)
-    local context = api.nvim_buf_get_lines(
-	0,
-	cur_pos[1] - 2,
-	cur_pos[1],
-	true
-    )
-    if((cur_pos[1] - 2) >= 0) then
-	ind_prev = string.match(context[1], "^%s*")
-	ind_current = string.match(context[2], "^%s*")
-    else
-        ind_prev = ""
-    end
-    if(str_in_line(context[1], pttrns)) then
-        api.nvim_set_current_line(ind_prev .. "    " .. string.sub(context[2], string.len(ind_current) + 1, -1))
-	api.nvim_win_set_cursor(0, { cur_pos[1], cur_pos[2] + string.len(ind_prev) - string.len(ind_current) + 4 })
-    else
-        if(string.len(ind_prev) ~= string.len(ind_current)) then
-            api.nvim_set_current_line(ind_prev .. string.sub(context[2], string.len(ind_current) + 1, -1))
-	    api.nvim_win_set_cursor(0, { cur_pos[1], cur_pos[2] + string.len(ind_prev) - string.len(ind_current) })
-	end
-    end
-end
+--vim.g.LuaIndenter = M.lua_indentexpr()
+--M.lua_indentexpr()
 
+return M

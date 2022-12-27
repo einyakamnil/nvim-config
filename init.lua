@@ -5,9 +5,9 @@
 --/_/ |_/\___/\____/|___/_/_/ /_/ /_/ 
 --Load plugins and colorscheme
 require('plugins')
-require('utils')
+utils = require('utils')
 require("register_popup")
-local yak = require('yak')
+yak = require('yak')
 require('lualine').setup {
     options = {
 	theme = yak,
@@ -44,20 +44,21 @@ vim.o.termguicolors = false
 vim.o.undofile = true
 vim.g.mapleader = ";"
 
---Better indenting
+--Better indenting, indentexpr outsourced to lua/utils.lua
 vim.cmd[[filetype indent off]]
 vim.o.tabstop = 8
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
-vim.o.autoindent = false
-vim.o.cindent = true
+vim.o.autoindent = true
+vim.o.cindent = false
+vim.g.YakIndent = function() return utils.lua_indentexpr() end
+vim.bo.indentexpr = "YakIndent()"
 
 --Good general key mappings
 vim.keymap.set("", "<Space>", ":", { noremap = true })
 vim.keymap.set("", "<CR>", "/", { noremap = true })
 vim.keymap.set("n", ",", ";", { noremap = true })
 vim.keymap.set("n", "z", "zA", { noremap = true })
-
 --Advanced key mappings
 --Jump to tag signs
 vim.keymap.set("i", "<C-c>", "<Esc>/<++><CR>\"_c4l", { noremap = true })
@@ -98,9 +99,32 @@ vim.keymap.set("n", ">", "<C-w>>", { noremap = true })
 vim.keymap.set("n", "J", "<C-e>", { noremap = true })
 vim.keymap.set("n", "K", "<C-y>", { noremap = true })
 
+--Settings for editing the nvim config files
+vim.api.nvim_create_augroup("MYVIMRC", { clear = true })
+local vimrc_keymaps = {
+    {
+	mode = "n",
+	key = "<F3>",
+	action = ":lua Reload(\"\")<Left><Left>",
+	_opts = { noremap = true, buffer = 0 }
+    },
+    {
+	mode = "n",
+	key = "<F4>",
+	action = ":so $MYVIMRC<CR>",
+	_opts = { noremap = true, buffer = 0 }
+    }
+}
+vim.api.nvim_create_autocmd(
+    "BufEnter",
+    {
+        group = "MYVIMRC",
+	pattern = { "/home/linkai/Projekte/nvim/init.lua", "/home/linkai/.config/nvim/init.lua" },
+	callback = function() keymap_callback(vimrc_keymaps) end
+    }
+)
 --Settings for Lua files
 vim.api.nvim_create_augroup("LUA", { clear = true })
-local lua_ind_pttrn = { "[%(%{%[]$", "function", "^%s*if.*then$", "^%s*else$", "^%s*elseif$" }
 local lua_keymaps = {
     {
 	mode = "n",
@@ -121,12 +145,6 @@ local lua_keymaps = {
 	mode = "n",
 	key = "<Leader>f",
 	action = "ofunction (<++>)<CR><++><CR><BS>end<Esc>2kf(i",
-	_opts = { noremap = true }
-    },
-    {
-	mode = "n",
-	key = "<F4>",
-	action = ":so /home/linkai/.config/nvim/init.lua<CR>",
 	_opts = { noremap = true }
     },
     {
@@ -163,20 +181,20 @@ vim.api.nvim_create_autocmd(
 	callback = function() keymap_callback(lua_keymaps) end
     }
 )
-vim.api.nvim_create_autocmd(
-    "Filetype",
-    {
-        group = "LUA",
-        pattern = "lua",
-        callback = function() vim.api.nvim_create_autocmd(
-            "TextChangedI",
-	    {
-	        group = "indenter",
-	        callback = function() check_indent(lua_ind_pttrn) end
-	    }
-            ) end
-    }
-)
+--vim.api.nvim_create_autocmd(
+--    "Filetype",
+--    {
+--        group = "LUA",
+--        pattern = "lua",
+--        callback = function() vim.api.nvim_create_autocmd(
+--            "TextChangedI",
+--	    {
+--	        group = "indenter",
+--	        callback = function() check_indent(lua_ind_pttrn) end
+--	    }
+--            ) end
+--    }
+--)
 
 --Settings for C and C++ files.
 vim.api.nvim_create_augroup("C", { clear = true })
