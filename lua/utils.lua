@@ -2,21 +2,6 @@
 local M = {}
 local api = vim.api
 
-local function getline(lnum)
-    -- Returns the specified line number of the current buffer
-    return tostring(api.nvim_buf_get_lines(0, lnum - 1, lnum, true)[1])
-end
-
-local function str_in_line(line, pttrns)
-    for _, p in ipairs(pttrns) do
-        if(string.find(line, p)) then
-            return true
-        end
-    end
-
-    return false
-end
-
 --Easy table printing
 function P(table)
     print(vim.inspect(table))
@@ -92,31 +77,3 @@ function tex_begin()
     api.nvim_win_set_cursor(0, pos)
     api.nvim_feedkeys("vj:s/<++>/", "n", true)
 end
---Custom indenter
-function M.lua_indentexpr()
-    local pttrn = { "[%(%{%[]$", "function", "^%s*if.*then$", "^%s*else$", "^%s*elseif$", "^%s*for.*do$" }
-    local curpos = api.nvim_win_get_cursor(0)
-    local prevlnum = vim.fn.prevnonblank(curpos[1] - 1)
-
-    if(prevlnum == 0) then
-	return 0
-    end
-
-    local ind = vim.fn.indent(prevlnum)
-    local prevl = getline(prevlnum)
-    local pidx = str_in_line(prevl, pttrn)
-
-    print(pidx)
-    if(pidx) then
-	return ind + vim.o.shiftwidth
-    else
-	return 0
-    end
-
-    print(pidx)
-end
-
---vim.g.LuaIndenter = M.lua_indentexpr()
---M.lua_indentexpr()
-
-return M

@@ -34,7 +34,10 @@ local hl_theme = {
     Title = { ctermfg = c.lightblue, bold = true },
     DiffAdd = { ctermfg = c.lightblue },
     DiffChanged = { ctermfg = c.lightblue },
-    DiffDelete = { ctermfg = c.lightblue }
+    DiffDelete = { ctermfg = c.lightblue },
+    TabLine = { ctermfg = c.grey, ctermbg = c.purple },
+    TabLineSel = { ctermfg = c.orange, ctermbg = c.purple, bold = true },
+    TabLineFill = { ctermbg = c.purple }
 }
 
 for group, style in pairs(hl_theme) do

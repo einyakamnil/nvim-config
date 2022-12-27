@@ -51,13 +51,11 @@ vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 vim.o.autoindent = true
 vim.o.cindent = false
-vim.g.YakIndent = function() return utils.lua_indentexpr() end
-vim.bo.indentexpr = "YakIndent()"
 
 --Good general key mappings
 vim.keymap.set("", "<Space>", ":", { noremap = true })
 vim.keymap.set("", "<CR>", "/", { noremap = true })
-vim.keymap.set("n", ",", ";", { noremap = true })
+vim.keymap.set({ "n", "v" }, ",", ";", { noremap = true })
 vim.keymap.set("n", "z", "zA", { noremap = true })
 --Advanced key mappings
 --Jump to tag signs
@@ -99,6 +97,10 @@ vim.keymap.set("n", ">", "<C-w>>", { noremap = true })
 vim.keymap.set("n", "J", "<C-e>", { noremap = true })
 vim.keymap.set("n", "K", "<C-y>", { noremap = true })
 
+--Faster tab switching
+vim.keymap.set("n", "<C-n>", "gt", { noremap = true })
+vim.keymap.set("n", "<C-p>", "gT", { noremap = true })
+
 --Settings for editing the nvim config files
 vim.api.nvim_create_augroup("MYVIMRC", { clear = true })
 local vimrc_keymaps = {
@@ -106,7 +108,7 @@ local vimrc_keymaps = {
 	mode = "n",
 	key = "<F3>",
 	action = ":lua Reload(\"\")<Left><Left>",
-	_opts = { noremap = true, buffer = 0 }
+	_opts = { noremap = true, buffer = true }
     },
     {
 	mode = "n",
@@ -124,77 +126,7 @@ vim.api.nvim_create_autocmd(
     }
 )
 --Settings for Lua files
-vim.api.nvim_create_augroup("LUA", { clear = true })
-local lua_keymaps = {
-    {
-	mode = "n",
-	key = "<C-c>",
-	action = function() comment("--") end,
-	_opts = { noremap = true }
-    },
-    {
-	mode = "v",
-	key = "<C-c>",
-	action = function() loop_selection(
-		comment,
-		"--" 
-		) end,
-	_opts = { noremap = true }
-    },
-    {
-	mode = "n",
-	key = "<Leader>f",
-	action = "ofunction (<++>)<CR><++><CR><BS>end<Esc>2kf(i",
-	_opts = { noremap = true }
-    },
-    {
-	mode = "n",
-	key = "<F5>",
-	action = ":w<CR>:!lua %<CR>",
-	_opts = { noremap = true }
-    }
-}
-vim.api.nvim_create_autocmd(
-    "Filetype",
-    {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() win_opts({
-		    foldmethod = "expr",
-		    foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
-		}) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "LUA",
-	pattern = "lua",
-	callback = function() buf_opts(
-	    { formatoptions = "cjlqr" }
-	) end
-    }
-)
-vim.api.nvim_create_autocmd(
-    "Filetype",
-    {
-        group = "LUA",
-	pattern = "lua",
-	callback = function() keymap_callback(lua_keymaps) end
-    }
-)
---vim.api.nvim_create_autocmd(
---    "Filetype",
---    {
---        group = "LUA",
---        pattern = "lua",
---        callback = function() vim.api.nvim_create_autocmd(
---            "TextChangedI",
---	    {
---	        group = "indenter",
---	        callback = function() check_indent(lua_ind_pttrn) end
---	    }
---            ) end
---    }
---)
+require("ft")
 
 --Settings for C and C++ files.
 vim.api.nvim_create_augroup("C", { clear = true })
