@@ -126,6 +126,7 @@ vim.api.nvim_create_autocmd(
     }
 )
 --Settings for Lua files
+--Settings for Python files.
 require("ft")
 
 --Settings for C and C++ files.
@@ -174,61 +175,6 @@ vim.api.nvim_create_autocmd("Filetype", {
 	group = "C",
 	pattern = { "c", "cpp" },
 	callback = function() keymap_callback(c_keymaps) end
-    }
-)
-
---Settings for Python files.
-vim.api.nvim_create_augroup("PYTHON", { clear = true })
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() win_opts({
-		foldmethod = "indent",
-		foldexpr = ""
-	    }) end
-    }
-)
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() buf_opts(
-		{ formatoptions = "cjnqrt" }
-	    ) end
-    }
-)
-local python_keymaps = {
-    {
-	mode = "n",
-	key = "<Leader>f",
-	action = "adef (<++>):<CR>\"\"\"<CR>\"\"\"<Esc>2kF(i",
-	_opts = { noremap = true }
-    },
-    {
-	mode = "n",
-	key = "<C-c>",
-	action = function() comment("#") end,
-	_opts = { noremap = true }
-    },
-    {
-	mode = "v",
-	key = "<C-c>",
-	action = function() loop_selection(
-		comment,
-		"#" 
-		) end,
-	_opts = { noremap = true }
-    },
-    {
-	mode = "n",
-	key = "<F5>",
-	action = ":w<CR>:!python3 %<CR>",
-	_opts = { noremap = true }
-    }
-}
-vim.api.nvim_create_autocmd("Filetype", {
-	group = "PYTHON",
-	pattern = "python",
-	callback = function() keymap_callback(python_keymaps) end
     }
 )
 

@@ -1,9 +1,10 @@
-util = require("ft.util")
+local util = require("ft.util")
+local api = vim.api
 
 --Variables for configuration
-local lua_indent = { "[%(%{%[][,]*$", "%s*function .*%s[^e][^n][^d]", "^%s*if.*then$", "^%s*else$", "^%s*elseif$", "^%s*for.*do$" }
-local lua_redent = { "^%s*[%)%}%]]$", "^%s*end$", "^%s*else$", "^%s*elseif$" }
-local lua_indkeys = { "0end" }
+local lua_indent = { "[%(%{%[]$", "%s*function .*%s[^e][^n][^d]", "^%s*if.*then$", "^%s*else$", "^%s*elseif$", "^%s*for.*do$" }
+local lua_redent = { "^%s*[%)%}%]]$", "^%s*end$", "^%s*else$", "^%s*elseif$", "^%s*[%)%}%]]%p$" }
+local lua_indkeys = ",0end"
 local lua_winopts = {
     foldmethod = "expr",
     foldexpr = "(getline(v:lnum)=~?'^--.*$')?0:(getline(v:lnum-1)=~?'^--.*$')||(getline(v:lnum+1)=~?'^--.*$')?1:2"
@@ -38,8 +39,8 @@ local lua_keymaps = {
 vim.g.LuaIndent = function() return util.yndentexpr(lua_indent, lua_redent) end
 
 --Configuration via autocommands
-vim.api.nvim_create_augroup("LUA", { clear = true })
-vim.api.nvim_create_autocmd(
+api.nvim_create_augroup("LUA", { clear = true })
+api.nvim_create_autocmd(
     "Filetype",
     {
 	group = "LUA",
@@ -47,13 +48,13 @@ vim.api.nvim_create_autocmd(
 	callback = function() util.win_opts(lua_winopts) end
     }
 )
-vim.api.nvim_create_autocmd("Filetype", {
+api.nvim_create_autocmd("Filetype", {
 	group = "LUA",
 	pattern = "lua",
 	callback = function() util.buf_opts(lua_bufopts) end
     }
 )
-vim.api.nvim_create_autocmd(
+api.nvim_create_autocmd(
     "Filetype",
     {
         group = "LUA",
@@ -61,20 +62,20 @@ vim.api.nvim_create_autocmd(
 	callback = function() keymap_callback(lua_keymaps) end
     }
 )
-vim.api.nvim_create_autocmd(
+api.nvim_create_autocmd(
     "Filetype",
     {
         group = "LUA",
 	pattern = "lua",
-	callback = function() vim.api.nvim_buf_set_option(0, "indentexpr", "LuaIndent()") end
+	callback = function() api.nvim_buf_set_option(0, "indentexpr", "LuaIndent()") end
     }
 )
-vim.api.nvim_create_autocmd(
+api.nvim_create_autocmd(
     "Filetype",
     {
         group = "LUA",
 	pattern = "lua",
-	callback = function() vim.bo.indentkeys = vim.bo.indentkeys .. ",0end" end,
+	callback = function() vim.bo.indentkeys = vim.bo.indentkeys .. lua_indkeys end,
 	once = true
     }
 )

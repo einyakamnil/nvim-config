@@ -12,7 +12,8 @@ local c = {
     purple = 53,
     grey = 248,
     green = 95,
-    red = 52
+    red = 52,
+--    darkblue = 17
 }
 
 local hl_theme = {
@@ -36,7 +37,7 @@ local hl_theme = {
     DiffChanged = { ctermfg = c.lightblue },
     DiffDelete = { ctermfg = c.lightblue },
     TabLine = { ctermfg = c.grey, ctermbg = c.purple },
-    TabLineSel = { ctermfg = c.orange, ctermbg = c.purple, bold = true },
+    TabLineSel = { ctermfg = c.orange, bold = true },
     TabLineFill = { ctermbg = c.purple }
 }
 
